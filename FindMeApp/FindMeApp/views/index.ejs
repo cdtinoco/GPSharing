@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>GPSharing</title>
+		<style type="text/css">
+			table{
+				font-size: 30px;
+				border: 2px solid black;
+				background-color:lightgray;
+			}
+			td{
+				border: 1px solid black;
+			}
+			th{
+				border: 1px solid black;
+			}
+		</style>
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+		integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+		crossorigin=""/>
+		<link rel="stylesheet" href="css/estilos.css">
+		<link rel="icon" href="descarga.ico">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&display=swap" rel="stylesheet">
+	</head>
+
+	<body>
+
+		<header>
+			<nav>
+				<a href="#">Inicio</a>
+				<a href="#">GPSharing</a>
+				<a href="#">Sobre nosotros</a>
+				<a href="#">Más</a>
+			</nav>
+			<div id="masterContainer" class="container">
+					<h1 id="Titulo-principal" class="titulos">GPSharing</h1>
+					<p class="texto"></p>
+			<div class="contenedor" style="display:flex; justify-content:center;">
+		</header>
+		<main>
+			<section class="contenedor sobre-nosotros">
+				<h2 class="titulo">
+					<p>Ubicación Geográfica</p>
+				</h2>
+				<div class="contenedor" style="display:flex; justify-content:center;">
+				<table summary="Ubicación geográfica">
+					<caption style="width:100%; height: 100%; text-align:center;"></caption>
+				  	<tr>
+				    	<th scope="col">Latitud</th>
+				    	<th scope="col">Longitud</th>
+						<th scope="col">Fecha</th>
+						<th scope="col">Hora</th>
+				  	</tr>
+
+				  	<tr>
+					    <td id="Latitud">-</td>
+					    <td id="Longitud">-</td>
+					    <td id="Fecha">-</td>
+					    <td id="Hora">-</td>
+				  	</tr>
+				</table>
+			</section>
+			<section>
+				<h2 class="titulo">
+					<p>Mapa</p>
+				</h2>
+				<div class="contenedor" style="display:flex; justify-content:center;">
+					<div id="mapa" style="width:100%; height:500px; border: 2px solid black;"></div>
+				</div>
+
+				<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="crossorigin=""></script>
+				<script type="text/javascript" src="./index.js"></script>
+			</section>
+			<section>
+				<h2 class="titulo">
+					<p>Día específico</p>
+					<input class="contenedor" type="Date" name="">	
+				</h2>
+			</section>
+		</main>
+		<footer>
+			<div class="contenedor-footer">
+				<div class="contenedor.foo">
+					<h4>Jasid Matinez</h4>
+					<p>200090474</p>
+				</div>
+				<div class="contenedor.foo">
+					<h4>Camilo Narvaez</h4>
+					<p>200119717</p>
+				</div>
+				<div class="contenedor.foo">
+					<h4>Arturo Pantoja</h4>
+					<p>200107162</p>
+				</div>
+				<div class="contenedor.foo">
+					<h4>Daniel Perez</h4>
+					<p>200108454</p>
+				</div>
+				<div class="contenedor.foo">
+					<h4>Carlos Tinoco</h4>
+					<p>200120833</p>
+				</div>
+			</div>
+			<h2 class="titulo-final">&copy; GPSharing</h2>
+		</footer>
+
+	</body>
+</html>
