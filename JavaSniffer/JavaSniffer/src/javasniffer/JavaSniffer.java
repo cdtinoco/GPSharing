@@ -69,9 +69,7 @@ public class JavaSniffer {
             }
         } catch (SocketException e) {
             System.out.println("Socket: " + e.getMessage());
-        } catch (IOException e) {
-            System.out.println("IO: " + e.getMessage());
-        }
+        } 
         
     }
     
