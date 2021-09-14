@@ -1,35 +1,21 @@
 const express = require('express');
 const app = express();
 const mysql = require('mysql');
+const dgram = require('dgram');
+const socket = dgram.createSocket('udp4');
 
 //CONFIGURACIÓN.
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
 app.use(express.static('static'));
 
+//Conexión con Base de datos
 const connection = mysql.createConnection({
 	host: 'dbgpsharing.c17vsjgk99sh.us-east-2.rds.amazonaws.com',
 	database: 'ubicacion',
 	user: 'admin',
 	password: 'J_apantojag99'
 });
-
-const dgram = require('dgram');
-const socket = dgram.createSocket('udp4');
-socket.on('message', (msg, rinfo) => {
-  console.log(`${msg}`);
-  Latitud = msg.toString().split(' ')[1];
-  Longitud = msg.toString().split(' ')[3];
-  Hora = msg.toString().split(' ')[5];
-  Fecha = msg.toString().split(' ')[6];
-  connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, Fecha, Hora) VALUE ("'+Latitud+'","'+Longitud+'","'+Fecha+'","'+Hora+'")', function(error, data, fileds){
-
-  });
-
-  
-});
-  
-socket.bind(50000)
 
 connection.connect(function(error){
 	if(error){
@@ -38,6 +24,21 @@ connection.connect(function(error){
 		console.log("Connection created successfully.");
 	}
 });
+
+//Datagram Socket de recepción.
+socket.on('message', (msg, rinfo) => {
+  console.log(`${msg}`);
+  Latitud = msg.toString().split(' ')[1];
+  Longitud = msg.toString().split(' ')[3];
+  Hora = msg.toString().split(' ')[5];
+  Fecha = msg.toString().split(' ')[6];
+  connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, Fecha, Hora) VALUE ("'+Latitud+'","'+Longitud+'","'+Fecha+'","'+Hora+'")', function(error, data, fileds){
+	  if(error){
+		  console.log("An error has occured: ", error)
+	  }
+  });
+});  
+socket.bind(50000)
 
 //RUTAS.
 app.get('/', function(req, res){
