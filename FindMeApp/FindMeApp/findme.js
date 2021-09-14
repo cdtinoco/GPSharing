@@ -28,7 +28,7 @@ app.get('/', function(req, res){
 });
 
 app.get('/data', function(req, res){
-	connection.query('SELECT * FROM ubicacion.registroubi WHERE idregistroUbi = (SELECT MAX(idregistroUbi) FROM ubicacion.registroubi)', function(error, data, fileds){
+	connection.query('SELECT * FROM registroubi WHERE idregistroUbi = (SELECT MAX(idregistroUbi) FROM registroubi)', function(error, data, fileds){
 		if(error){
 			console.log(error);
 		}else{
