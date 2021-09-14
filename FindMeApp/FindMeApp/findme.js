@@ -14,6 +14,21 @@ const connection = mysql.createConnection({
 	password: 'J_apantojag99'
 });
 
+socket.on('message', (msg, rinfo) => {
+  console.log(`${msg}`);
+  Latitud = msg.toString().split(' ')[1];
+  Longitud = msg.toString().split(' ')[3];
+  Hora = msg.toString().split(' ')[5];
+  Fecha = msg.toString().split(' ')[6];
+  connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, Fecha, Hora) VALUE ("'+Latitud+'","'+Longitud+'","'+Fecha+'","'+Hora+'")', function(error, data, fileds){
+
+  });
+
+  
+});
+  
+socket.bind(50000)
+
 connection.connect(function(error){
 	if(error){
 		console.log(error);
