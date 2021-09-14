@@ -14,6 +14,8 @@ const connection = mysql.createConnection({
 	password: 'J_apantojag99'
 });
 
+const dgram = require('dgram');
+const socket = dgram.createSocket('udp4');
 socket.on('message', (msg, rinfo) => {
   console.log(`${msg}`);
   Latitud = msg.toString().split(' ')[1];
