@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                     SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
                     sdf.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
                     String curtime = sdf.format(new Date(time));
-                    String msg = "Lat: " + myLatitude + "\nLong: " + myLongitude + "\nTimeStamp: " + curtime;
+                    String msg = "Lat: " + myLatitude + " " + "\nLong: " + myLongitude + " " + "\nTimeStamp: " + curtime;
                     miub.setText(msg);
 
                 }
