@@ -44,7 +44,7 @@ public class JavaSniffer {
                     System.out.println(Date);
                     String usuario = "admin";
                     String clave = "J_apantojag99";
-                    String url = "jdbc:mysql://dbgpsharing.c17vsjgk99sh.us-east-2.rds.amazonaws.com/ubicación";
+                    String url = "jdbc:mysql://dbgpsharing.c17vsjgk99sh.us-east-2.rds.amazonaws.com/ubicacion";
                     Connection con;
                     Statement stmt;
                     try {
