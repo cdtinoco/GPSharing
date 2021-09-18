@@ -11,10 +11,10 @@ app.use(express.static('static'));
 
 //Conexión con Base de datos
 const connection = mysql.createConnection({
-	host: 'dbgpsharing.c17vsjgk99sh.us-east-2.rds.amazonaws.com',
-	database: 'ubicacion',
-	user: 'admin',
-	password: 'J_apantojag99'
+	host: process.env.DB_HOST,
+	database: process.env.DB_NAME,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASSWORD
 });
 
 connection.connect(function(error){
