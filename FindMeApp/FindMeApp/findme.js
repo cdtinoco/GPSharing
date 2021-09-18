@@ -3,6 +3,7 @@ const app = express();
 const mysql = require('mysql');
 const dgram = require('dgram');
 const socket = dgram.createSocket('udp4');
+require('dotenv').config();
 
 //CONFIGURACIÓN.
 app.set('port', process.env.PORT || 3000);
