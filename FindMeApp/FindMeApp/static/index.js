@@ -51,7 +51,7 @@ function createMap(lat, lng){
 	
 	
     coord.push([lat,lng]);
-    L.polyline(coord, {color: 'red'}).addTo(mymap);
+    polyline = L.polyline(coord, {color: 'red'}).addTo(mymap);
     marker = L.marker([lat, lng]);
     marker.addTo(mymap);
     marker.on('click', function(){
