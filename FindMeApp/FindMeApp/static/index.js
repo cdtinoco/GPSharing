@@ -27,11 +27,6 @@ function peticion(){
 			Fecha.innerHTML = text;
 			Hora.innerHTML = resultado.Hora;
 			createMap(resultado.Latitud, resultado.Longitud);
-			//var array = [
-			//	[resultado.Latitud, resultado.Longitud]
-			//];
-			//var latlngs = newArray();
-			//latlngs.push(array);
 		}else{
 			console.log("readyState: ", http.readyState);
 			console.log("status: ", http.status);
@@ -51,7 +46,7 @@ function createMap(lat, lng){
     L.tileLayer(tiles, {
         maxZoom: 18,
     }).addTo(mymap);
-    var temp = [latn lng];
+    var temp = [lat lng];
     latlng.push(temp);
     var polyline = L.polyline(latlng, {color: 'red'}).addTo(mymap);
     mymap.fitBounds(polyline.getBounds());
