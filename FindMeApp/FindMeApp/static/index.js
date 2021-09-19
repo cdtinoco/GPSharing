@@ -49,7 +49,7 @@ function createMap(lat, lng){
     var temp = [lat, lng];
     latlng.push(temp);
     var polyline = L.polyline(latlng, {color: 'red'}).addTo(mymap);
-    //mymap.fitBounds(polyline.getBounds());
+    mymap.fitBounds(polyline.getBounds());
     marker = L.marker([lat, lng]);
     marker.addTo(mymap);
     marker.on('click', function(){
