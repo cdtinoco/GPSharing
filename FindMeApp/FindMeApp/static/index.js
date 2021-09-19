@@ -11,8 +11,6 @@ setInterval("peticion()", 3000);
 
 function peticion(){
 	const url = '/data'
-	
-
 	const http = new XMLHttpRequest()
 	http.open("GET", url);
 	http.onreadystatechange = function(){
@@ -28,11 +26,11 @@ function peticion(){
 			Fecha.innerHTML = text;
 			Hora.innerHTML = resultado.Hora;
 			createMap(resultado.Latitud, resultado.Longitud);
-			var array = [
-				[resultado.Latitud, resultado.Longitud]
-			];
-			var latlngs = newArray();
-			latlngs.push(array);
+			//var array = [
+			//	[resultado.Latitud, resultado.Longitud]
+			//];
+			//var latlngs = newArray();
+			//latlngs.push(array);
 		}else{
 			console.log("readyState: ", http.readyState);
 			console.log("status: ", http.status);
@@ -52,7 +50,7 @@ function createMap(lat, lng){
     L.tileLayer(tiles, {
         maxZoom: 18,
     }).addTo(mymap);
-	
+    
     //var polyline = L.polyline(array, {color: 'red'}).addTo(mymap);
     //mymap.fitBounds(polyline.getBounds());
     marker = L.marker([lat, lng]);
