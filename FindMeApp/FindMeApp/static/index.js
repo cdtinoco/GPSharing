@@ -50,7 +50,7 @@ function createMap(lat, lng){
     }).addTo(mymap);
 	
 	
-    coord.push([lat,lng]);
+    coord.push([100,234],[455,589]);
     console.log(coord);
     //L.polyline(coord, {color: 'red'}).addTo(mymap);
     //mymap.fitBounds(polyline.getBounds());
