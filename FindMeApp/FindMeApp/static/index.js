@@ -5,8 +5,6 @@ var Hora = document.getElementById("Hora");
 
 var mymap = L.map('mapa');
 var marker;
-var coord = newArray();
-var i = 0;
 
 const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
@@ -31,8 +29,6 @@ function peticion(){
 			Fecha.innerHTML = text;
 			Hora.innerHTML = resultado.Hora;
 			createMap(resultado.Latitud, resultado.Longitud);
-			coord [i] = [resultado.Latitud, resultado.Longitud];
-			i = i++;
 		}else{
 			console.log("readyState: ", http.readyState);
 			console.log("status: ", http.status);
@@ -53,9 +49,8 @@ function createMap(lat, lng){
         maxZoom: 18,
     }).addTo(mymap);
 	
-    
-    var polyline = L.polyline(coord, {color: 'red'}).addTo(mymap);
-    mymap.fitBounds(polyline.getBounds());
+    //var polyline = L.polyline(array, {color: 'red'}).addTo(mymap);
+    //mymap.fitBounds(polyline.getBounds());
     marker = L.marker([lat, lng]);
     marker.addTo(mymap);
     marker.on('click', function(){
