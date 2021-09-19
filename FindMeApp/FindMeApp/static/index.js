@@ -2,7 +2,6 @@ var Latitud = document.getElementById("Latitud");
 var Longitud = document.getElementById("Longitud");
 var Fecha = document.getElementById("Fecha");
 var Hora = document.getElementById("Hora");
-
 var mymap = L.map('mapa');
 var marker;
 
@@ -29,6 +28,11 @@ function peticion(){
 			Fecha.innerHTML = text;
 			Hora.innerHTML = resultado.Hora;
 			createMap(resultado.Latitud, resultado.Longitud);
+			var array = [
+				[resultado.Latitud, resultado.Longitud]
+			];
+			var latlngs = newArray();
+			latlngs.push(array);
 		}else{
 			console.log("readyState: ", http.readyState);
 			console.log("status: ", http.status);
