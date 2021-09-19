@@ -56,6 +56,10 @@ function createMap(lat, lng){
     }).addTo(mymap);
 	
     //coord.push([100,234],[455,589]);
+    var polyline = L.polyline(coord, {color: 'red'}).addTo(mymap);
+
+    mymap.fitBounds(polyline.getBounds());
+
     console.log(coord);
     //L.polyline(coord, {color: 'red'}).addTo(mymap);
     //mymap.fitBounds(polyline.getBounds());
