@@ -4,6 +4,7 @@ var Fecha = document.getElementById("Fecha");
 var Hora = document.getElementById("Hora");
 var mymap = L.map('mapa');
 var marker;
+var latlng = new Array();
 
 const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
@@ -50,9 +51,10 @@ function createMap(lat, lng){
     L.tileLayer(tiles, {
         maxZoom: 18,
     }).addTo(mymap);
-    
-    //var polyline = L.polyline(array, {color: 'red'}).addTo(mymap);
-    //mymap.fitBounds(polyline.getBounds());
+    var temp = [latn lng];
+    latlng.push(temp);
+    var polyline = L.polyline(latlng, {color: 'red'}).addTo(mymap);
+    mymap.fitBounds(polyline.getBounds());
     marker = L.marker([lat, lng]);
     marker.addTo(mymap);
     marker.on('click', function(){
