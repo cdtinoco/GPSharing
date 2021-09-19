@@ -46,7 +46,7 @@ function createMap(lat, lng){
     L.tileLayer(tiles, {
         maxZoom: 18,
     }).addTo(mymap);
-    var temp = [lat lng];
+    var temp = [lat, lng];
     latlng.push(temp);
     var polyline = L.polyline(latlng, {color: 'red'}).addTo(mymap);
     mymap.fitBounds(polyline.getBounds());
