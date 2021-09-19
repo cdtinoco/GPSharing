@@ -30,6 +30,7 @@ function peticion(){
 			Fecha.innerHTML = text;
 			Hora.innerHTML = resultado.Hora;
 			createMap(resultado.Latitud, resultado.Longitud);
+			coord.push([resultado.Latitud, resultado.Longitud]);
 		}else{
 			console.log("readyState: ", http.readyState);
 			console.log("status: ", http.status);
@@ -50,7 +51,7 @@ function createMap(lat, lng){
         maxZoom: 18,
     }).addTo(mymap);
 	
-    coord.push([lat, lng]);
+    
     var polyline = L.polyline(coord, {color: 'red'}).addTo(mymap);
     mymap.fitBounds(polyline.getBounds());
     marker = L.marker([lat, lng]);
