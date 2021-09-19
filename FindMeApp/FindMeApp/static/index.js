@@ -5,7 +5,7 @@ var Hora = document.getElementById("Hora");
 
 var mymap = L.map('mapa');
 var marker;
-var polyline;
+//var polyline;
 var coord = newArray();
 const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
@@ -51,8 +51,9 @@ function createMap(lat, lng){
 	
 	
     coord.push([lat,lng]);
-    L.polyline(coord, {color: 'red'}).addTo(mymap);
-    mymap.fitBounds(polyline.getBounds());
+    console.log(coord);
+    //L.polyline(coord, {color: 'red'}).addTo(mymap);
+    //mymap.fitBounds(polyline.getBounds());
     marker = L.marker([lat, lng]);
     marker.addTo(mymap);
     marker.on('click', function(){
