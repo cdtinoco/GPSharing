@@ -2,11 +2,20 @@ var Latitud = document.getElementById("Latitud");
 var Longitud = document.getElementById("Longitud");
 var Fecha = document.getElementById("Fecha");
 var Hora = document.getElementById("Hora");
+const centerBtn = document.getElementById('centerBtn');
+
 var mymap = L.map('mapa');
 var marker;
 var latlng = new Array();
-
+var actual = new Array();
+var seted = false;
 const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+centerBtn.addEventListener('click', function(e){
+	e.preventDefault();
+	seted = false;
+	createMap(actual[0][0], actual[0][1]);
+});
 
 setInterval("peticion()", 3000);
 
@@ -17,7 +26,7 @@ function peticion(){
 	http.onreadystatechange = function(){
 	 	if(this.readyState == 4 && this.status == 200){
 			var resultado = JSON.parse(this.responseText);
-			console.log(resultado);
+			actual[0] = [resultado.Latitud, resultado.Longitud];
 			Latitud.innerHTML = resultado.Latitud;
 			Longitud.innerHTML= resultado.Longitud;
 			var text = "";
@@ -42,17 +51,23 @@ function createMap(lat, lng){
             mymap.removeLayer(marker);
         }
     }
-    mymap.setView([lat, lng], 13);
-    L.tileLayer(tiles, {
-        maxZoom: 18,
-    }).addTo(mymap);
+    if(seted == false){
+    	console.log("Hola");
+	    //Setear Latitud-Longitud.
+	    mymap.setView([lat, lng], 13);
+	    L.tileLayer(tiles, {
+	        maxZoom: 18,
+	    }).addTo(mymap);
+	    seted = true;
+    }
+    
+
+    //Polilinea.
     var temp = [lat, lng];
     latlng.push(temp);
     var polyline = L.polyline(latlng, {color: 'red'}).addTo(mymap);
-    mymap.fitBounds(polyline.getBounds());
+
+    //Marcador.
     marker = L.marker([lat, lng]);
     marker.addTo(mymap);
-    marker.on('click', function(){
-        getWeather(this.getLatLng().lat, this.getLatLng().lng);
-    });
 }
