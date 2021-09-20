@@ -17,7 +17,6 @@ centerBtn.addEventListener('click', function(e){
 	createMap(actual[0][0], actual[0][1]);
 });
 
-
 setInterval("peticion()", 3000);
 
 function peticion(){
@@ -62,7 +61,6 @@ function createMap(lat, lng){
 	    seted = true;
     }
     
-
     //Polilinea.
     var temp = [lat, lng];
     latlng.push(temp);
