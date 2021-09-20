@@ -9,13 +9,14 @@ var marker;
 var latlng = new Array();
 var actual = new Array();
 var seted = false;
-const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-
+const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; 
+  
 centerBtn.addEventListener('click', function(e){
 	e.preventDefault();
 	seted = false;
 	createMap(actual[0][0], actual[0][1]);
 });
+
 
 setInterval("peticion()", 3000);
 
