@@ -11,6 +11,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('static'));
 
 //Conexión con Base de datos
+/*
 const connection = mysql.createConnection({
 	host: process.env.DB_HOST,
 	database: process.env.DB_NAME,
@@ -26,7 +27,6 @@ connection.connect(function(error){
 	}
 });
 
-
 //Datagram Socket de recepción.
 socket.on('message', (msg, rinfo) => {
   console.log(`${msg}`);
@@ -41,13 +41,15 @@ socket.on('message', (msg, rinfo) => {
   });
 });  
 socket.bind(50000)
-
+*/
 //RUTAS.
 app.get('/', function(req, res){
 	res.render('index');
 });
 
 app.get('/data', function(req, res){
+	res.send({'Latitud': 53.365567, 'Longitud': -1.460983, 'Fecha': '2021-09-19', 'Hora': '11:54'});
+	/*
 	connection.query('SELECT * FROM registroUbi WHERE idregistroUbi = (SELECT MAX(idregistroUbi) FROM registroUbi)', function(error, data, fileds){
 		if(error){
 			console.log(error);
@@ -56,6 +58,7 @@ app.get('/data', function(req, res){
 			res.send(data[0]);
 		}
 	});
+	*/
 });
 
 //FIN.

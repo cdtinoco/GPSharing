@@ -5,6 +5,7 @@ var Hora = document.getElementById("Hora");
 var mymap = L.map('mapa');
 var marker;
 var latlng = new Array();
+var seted = false;
 
 const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
@@ -42,17 +43,24 @@ function createMap(lat, lng){
             mymap.removeLayer(marker);
         }
     }
-    mymap.setView([lat, lng], 13);
-    L.tileLayer(tiles, {
-        maxZoom: 18,
-    }).addTo(mymap);
+    if(seted == false){
+    	console.log("Hola");
+	    //Setear Latitud-Longitud.
+	    mymap.setView([lat, lng], 13);
+	    L.tileLayer(tiles, {
+	        maxZoom: 18,
+	    }).addTo(mymap);
+	    seted = true;
+    }
+    
+
+    //Polilinea.
     var temp = [lat, lng];
     latlng.push(temp);
     var polyline = L.polyline(latlng, {color: 'red'}).addTo(mymap);
-    mymap.fitBounds(polyline.getBounds());
+    //mymap.fitBounds(polyline.getBounds());
+
+    //Marcador.
     marker = L.marker([lat, lng]);
     marker.addTo(mymap);
-    marker.on('click', function(){
-        getWeather(this.getLatLng().lat, this.getLatLng().lng);
-    });
 }
