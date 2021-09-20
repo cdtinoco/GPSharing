@@ -10,13 +10,13 @@ app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
 app.use(express.static('static'));
 
-//Conexión con Base de datos
-const connection = mysql.createConnection({
-	host: process.env.DB_HOST,
-	database: process.env.DB_NAME,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASSWORD
-});
+//Conexión con base de datos
+const 	connection = mysql.createConnection({
+		host: process.env.DB_HOST,
+		database: process.env.DB_NAME,
+		user: process.env.DB_USER,
+		password: process.env.DB_PASSWORD
+	});
 
 connection.connect(function(error){
 	if(error){
