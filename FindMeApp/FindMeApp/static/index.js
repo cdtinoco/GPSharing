@@ -63,8 +63,9 @@ function createMap(lat, lng){
     }
     
     //Polilinea.
+	
     var temp = [lat, lng];
-    latlng.push(temp);
+    latlng.push([lat, lng]);
     var polyline = L.polyline(latlng, {color: 'red'}).addTo(mymap);
 
     //Marcador.
