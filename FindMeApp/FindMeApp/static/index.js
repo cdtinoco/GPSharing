@@ -1,8 +1,9 @@
-var Latitud = document.getElementById("Latitud");
-var Longitud = document.getElementById("Longitud");
 var Fecha = document.getElementById("Fecha");
 var Hora = document.getElementById("Hora");
 const centerBtn = document.getElementById('centerBtn');
+var Latitud = document.getElementById("Latitud");
+var Longitud = document.getElementById("Longitud");
+
 
 var mymap = L.map('mapa');
 var marker;
