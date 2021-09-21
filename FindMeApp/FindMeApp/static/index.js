@@ -55,7 +55,7 @@ function createMap(lat, lng){
     if(seted == false){
     	console.log("Hola");
 	    //Setear Latitud-Longitud.
-	    mymap.setView([lat, lng], 13);
+	    mymap.setView([lat, lng],);
 	    L.tileLayer(tiles, {
 	        maxZoom: 18,
 	    }).addTo(mymap);
