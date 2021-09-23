@@ -3,7 +3,9 @@ const app = express();
 const mysql = require('mysql');
 const dgram = require('dgram');
 const socket = dgram.createSocket('udp4');
+const sys = require('child_process');
 require('dotenv').config();
+
 
 //CONFIGURACIÓN.
 app.set('port', process.env.PORT || 3000);
@@ -43,6 +45,7 @@ socket.on('message', (msg, rinfo) => {
 socket.bind(50000)
 
 //RUTAS.
+
 app.get('/', function(req, res){
 	res.render('index');
 });
@@ -56,6 +59,10 @@ app.get('/data', function(req, res){
 			res.send(data[0]);
 		}
 	});
+});
+
+app.post('/gitpull', function(req, res){
+	sys.exec("cd /home/ubuntu/projects/GPSharing && git pull");
 });
 
 //FIN.
