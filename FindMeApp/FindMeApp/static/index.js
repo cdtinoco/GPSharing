@@ -3,6 +3,7 @@ var Longitud = document.getElementById("Longitud");
 var Fecha = document.getElementById("Fecha");
 var Hora = document.getElementById("Hora");
 const centerBtn = document.getElementById('centerBtn');
+const infoDiv = document.getElementById('infoDiv');
 
 var mymap = L.map('mapa');
 var marker;
@@ -29,11 +30,17 @@ function peticion(){
 			actual[0] = [resultado.Latitud, resultado.Longitud];
 			Latitud.innerHTML = resultado.Latitud;
 			Longitud.innerHTML= resultado.Longitud;
-			var text = "";
+			var txDate = "";
+			var txLat = "";
+			var txLng = "";
 			for(var n=0; n<10; n++){
-				text += resultado.Fecha[n];
+				txDate += resultado.Fecha[n];
+				txLat += resultado.Latitud[n];
+				txLng += resultado.Longitud[n];
 			}
-			Fecha.innerHTML = text;
+			Fecha.innerHTML = txDate;
+			Latitud.innerHTML = txLat;
+			Longitud.innerHTML = txLng;
 			Hora.innerHTML = resultado.Hora;
 			createMap(resultado.Latitud, resultado.Longitud);
 		}else{
@@ -52,7 +59,6 @@ function createMap(lat, lng){
         }
     }
     if(seted == false){
-    	console.log("Hola");
 	    //Setear Latitud-Longitud.
 	    mymap.setView([lat, lng], 13);
 	    L.tileLayer(tiles, {

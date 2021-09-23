@@ -116,6 +116,27 @@ footer{
     color: #9e9797;
 }
 
+#infoDiv{
+    min-height:50px;
+    min-width:200px;
+    max-width: 500px;
+    max-height: 100px;
+
+    background: rgba(58, 58, 204, 0.7);
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.infoH6{
+    font-size: 14px;
+}
+
+.infoDiv-item{
+    display: flex;
+    justify-content: space-between;
+    margin: 5px;
+}
+
 @media screen and (max-width:900px){
     header{
         background-position: center;
