@@ -61,7 +61,7 @@ app.get('/data', function(req, res){
 	});
 });
 
-app.post('/gitpull', function(req, res){
+app.post('/autopull', function(req, res){
 	sys.exec("cd /home/ubuntu/projects/GPSharing && git pull");
 });
 
