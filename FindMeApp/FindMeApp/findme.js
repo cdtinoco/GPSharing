@@ -12,7 +12,7 @@ console.log("Holaaaaaaaaaaaaaaaa");
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
 app.use(express.static('static'));
-//trtrtrtr
+//tytyguo
 //Conexión con base de datos
 const 	connection = mysql.createConnection({
 		host: process.env.DB_HOST,
