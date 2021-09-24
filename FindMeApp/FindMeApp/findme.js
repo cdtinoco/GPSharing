@@ -43,7 +43,7 @@ socket.on('message', (msg, rinfo) => {
   });
 });  
 socket.bind(50000)
-
+//777777
 //RUTAS.
 
 app.get('/', function(req, res){
