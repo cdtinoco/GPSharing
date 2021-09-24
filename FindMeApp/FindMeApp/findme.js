@@ -62,7 +62,7 @@ app.get('/data', function(req, res){
 });
 
 app.post('/autopull', function(req, res){
-	conole.log(sys.exec("cd /home/ubuntu/projects/GPSharing && git reset --hard && git pull").exitCode);
+	console.log(sys.exec("cd /home/ubuntu/projects/GPSharing && git reset --hard && git pull").exitCode);
 	console.log("recibido")
 });
 
