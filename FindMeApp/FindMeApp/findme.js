@@ -6,7 +6,8 @@ const socket = dgram.createSocket('udp4');
 const sys = require('child_process');
 require('dotenv').config();
 
-
+//ESTO ES UNA PRUEBA
+console.log("Holaaaaaaaaaaaaaaaa");
 //CONFIGURACIÓN.
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
@@ -27,7 +28,6 @@ connection.connect(function(error){
 		console.log("Connection created successfully.");
 	}
 });
-
 
 //Datagram Socket de recepción.
 socket.on('message', (msg, rinfo) => {
