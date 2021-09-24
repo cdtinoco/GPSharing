@@ -12,7 +12,7 @@ console.log("Holaaaaaaaaaaaaaaaa");
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
 app.use(express.static('static'));
-//tytyguo
+
 //Conexión con base de datos
 const 	connection = mysql.createConnection({
 		host: process.env.DB_HOST,
@@ -43,7 +43,7 @@ socket.on('message', (msg, rinfo) => {
   });
 });  
 socket.bind(50000)
-//777777
+
 //RUTAS.
 
 app.get('/', function(req, res){
@@ -62,7 +62,7 @@ app.get('/data', function(req, res){
 });
 
 app.post('/autopull', function(req, res){
-	sys.exec("cd /home/ubuntu/projects/GPSharing && git reset --hard && git pull");
+	conole.log(sys.exec("cd /home/ubuntu/projects/GPSharing && git reset --hard && git pull").exitCode);
 	console.log("recibido")
 });
 
