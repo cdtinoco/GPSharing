@@ -61,7 +61,7 @@ function createMap(lat, lng){
     }
     if(seted == false){
 	    //Setear Latitud-Longitud.
-	    mymap.setView([lat, lng]);
+	    mymap.setView([lat, lng], 13);
 	    L.tileLayer(tiles, {
 	        maxZoom: 18,
 	    }).addTo(mymap);
