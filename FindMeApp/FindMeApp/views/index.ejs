@@ -44,23 +44,22 @@
 					<div class="container-fluid">
 						<div style="display:flex; justify-content:center;">
 							<div style="display:flex;">
-								<form action="/history" method="GET" class="row">
-									<div class="col-5">
-										<input type="datetime-local" name="date1">
+								<div id="carHistory-form" class="row">
+									<div class="col-9" style="display:flex; justify-content:space-between;">
+										<input type="datetime-local" id="date1">
+										<input type="datetime-local" id="date2">
 									</div>
-									<div class="col-5">
-										<input type="datetime-local" name="date2">
+									<div class="col-3" style="display:flex; justify-content:space-between;">
+										<button id="historyBtn">Consultar</button>
+										<button id="returnBtn">Regresar</button>
 									</div>
-									<div class="col-2">
-										<input type="submit" name="button1">
-									</div>
-								</form>
+								</div>
 							</div>
 						</div>
-						
+
 						<div id="mapa" style="width:100%; height:500px; border: 2px solid black;">
 							<div class="leaflet-top leaflet-right">
-								<button id="centerBtn" style="border-radius:5px; border:2px solid black; font-weight:700; margin-right: 10px; margin-top: 10px; pointer-events:auto;"> Center </button>
+								<button id="centerBtn"> Center </button>
 							</div>
 							<div class="container-fluid leaflet-bottom" style="display:flex; justify-content:center; margin-bottom:5px;">
 								<div id="infoDiv">

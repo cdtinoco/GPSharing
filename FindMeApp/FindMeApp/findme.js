@@ -77,7 +77,7 @@ app.get('/history', function(req, res){
 			console.log(error);
 		}else{
 			console.log(data);
-			res.send(data[0]);
+			res.send(data);
 		}
 	});
 });
