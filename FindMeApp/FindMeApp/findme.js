@@ -26,7 +26,6 @@ connection.connect(function(error){
 		console.log("Connection created successfully.");
 	}
 });
-// hola xd
 
 //Datagram Socket de recepción.
 socket.on('message', (msg, rinfo) => {
@@ -35,8 +34,7 @@ socket.on('message', (msg, rinfo) => {
   Longitud = msg.toString().split(' ')[3];
   Fecha = msg.toString().split(' ')[5];
   Hora = msg.toString().split(' ')[6];
-  TS = Fecha.concat(" "+Hora);
-  connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp) VALUE ("'+Latitud+'","'+Longitud+'","'+TS+'")', function(error, data, fileds){
+  connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, Fecha, Hora) VALUE ("'+Latitud+'","'+Longitud+'","'+Fecha+'","'+Hora+'")', function(error, data, fileds){
 	  if(error){
 		  console.log("An error has occured: ", error)
 	  }
