@@ -39,7 +39,7 @@ function peticion(){
 				txLat += resultado.Latitud[n];
 				txLng += resultado.Longitud[n];
 			}
-			//hola
+			
 			Fecha.innerHTML = txDate;
 			Latitud.innerHTML = txLat;
 			Longitud.innerHTML = txLng;
