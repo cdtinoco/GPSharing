@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const dgram = require('dgram');
 const socket = dgram.createSocket('udp4');
 const sys = require('child_process');
+const moment = require('moment');
 require('dotenv').config();
 
 //CONFIGURACIÓN.
@@ -62,7 +63,23 @@ app.get('/data', function(req, res){
 app.get('/history', function(req, res){
 	var date1 = req.query.date1;
 	var date2 = req.query.date2;
-	console.log(date1);
+
+	var day1 = moment(date1).format('YYYY-MM-DD');
+	var hour1 = moment(date1).format('HH:mm');
+	var day2 = moment(date2).format('YYYY-MM-DD');
+	var hour2 = moment(date2).format('HH:mm');
+
+	console.log(day1);
+	console.log(day2);
+	
+	connection.query(`SELECT * FROM registroUbi WHERE Fecha BETWEEN ${day1} AND ${day2}`, function(error, data, fileds){
+		if(error){
+			console.log(error);
+		}else{
+			console.log(data);
+			res.send(data[0]);
+		}
+	});
 });
 
 app.post('/autopull', function(req, res){
