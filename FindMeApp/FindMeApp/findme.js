@@ -5,9 +5,7 @@ const dgram = require('dgram');
 const socket = dgram.createSocket('udp4');
 const sys = require('child_process');
 require('dotenv').config();
-//22eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee333333333333355555555555555555
-//ESTO ES UNA PRUEBA
-console.log("Holaaaaaaaaaaaaaaaa");
+
 //CONFIGURACIÓN.
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
@@ -34,9 +32,8 @@ socket.on('message', (msg, rinfo) => {
   console.log(`${msg}`);
   Latitud = msg.toString().split(' ')[1];
   Longitud = msg.toString().split(' ')[3];
-  Hora = msg.toString().split(' ')[5];
-  Fecha = msg.toString().split(' ')[6];
-  connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, Fecha, Hora) VALUE ("'+Latitud+'","'+Longitud+'","'+Fecha+'","'+Hora+'")', function(error, data, fileds){
+  TS = msg.toString().split(' ')[5,6];
+  connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp) VALUE ("'+Latitud+'","'+Longitud+'","'+TS+'")', function(error, data, fileds){
 	  if(error){
 		  console.log("An error has occured: ", error)
 	  }

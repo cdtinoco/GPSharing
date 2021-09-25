@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                     String myLatitude = String.valueOf (location.getLatitude());
                     String myLongitude = String.valueOf(location.getLongitude());
                     long time = location.getTime();
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss yyyy-MM-dd");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     sdf.setTimeZone(TimeZone.getTimeZone("America/Bogota"));
                     String curtime = sdf.format(new Date(time));
                     String msg = "Lat: " + myLatitude + " " + "\nLong: " + myLongitude + " " + "\nTimeStamp: " + curtime;
