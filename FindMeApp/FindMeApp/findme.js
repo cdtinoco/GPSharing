@@ -61,6 +61,12 @@ app.get('/data', function(req, res){
 	});
 });
 
+app.get('/history', function(req, res){
+	var date1 = req.query.date1;
+	var date2 = req.query.date2;
+	console.log(date1);
+});
+
 app.post('/autopull', function(req, res){
 	console.log(sys.exec("cd /home/ubuntu/projects/GPSharing && git reset --hard && git pull").exitCode);
 	console.log("recibido")

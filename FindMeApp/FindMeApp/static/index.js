@@ -31,19 +31,20 @@ function peticion(){
 			actual[0] = [resultado.Latitud, resultado.Longitud];
 			Latitud.innerHTML = resultado.Latitud;
 			Longitud.innerHTML= resultado.Longitud;
+			//Limitar los caracteres.
 			var txDate = "";
 			var txLat = "";
 			var txLng = "";
 			for(var n=0; n<10; n++){
-				txDate += resultado.Fecha[n];
+				//txDate += resultado.Fecha[n];
 				txLat += resultado.Latitud[n];
 				txLng += resultado.Longitud[n];
 			}
 			
-			Fecha.innerHTML = txDate;
+			//Fecha.innerHTML = txDate;
 			Latitud.innerHTML = txLat;
 			Longitud.innerHTML = txLng;
-			Hora.innerHTML = resultado.Hora;
+			//Hora.innerHTML = resultado.Hora;
 			createMap(resultado.Latitud, resultado.Longitud);
 		}else{
 			console.log("readyState: ", http.readyState);
