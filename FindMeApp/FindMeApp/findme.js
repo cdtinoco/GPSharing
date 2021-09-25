@@ -5,7 +5,7 @@ const dgram = require('dgram');
 const socket = dgram.createSocket('udp4');
 const sys = require('child_process');
 require('dotenv').config();
-//uuuuuu
+
 //CONFIGURACIÓN.
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
