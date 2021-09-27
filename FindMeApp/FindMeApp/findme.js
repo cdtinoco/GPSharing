@@ -91,3 +91,5 @@ app.post('/autopull', function(req, res){
 app.listen(app.get('port'), function(){
 	console.log("Server listening in port: ", app.get('port'));
 });
+
+//"Sistemas de comunicaciones, Simon Hyking".
