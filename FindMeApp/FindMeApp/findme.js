@@ -73,7 +73,7 @@ app.get('/history', function(req, res){
 	console.log(hour1);
 	console.log(hour2);
 	
-	connection.query("SELECT * FROM registroUbi WHERE Fecha BETWEEN '"+day1+"' AND '"+day2+"' AND Hora BETWEEN '"+hour1+"' AND '"+hour2+"'", function(error, data, fileds){
+	connection.query("SELECT * FROM registroUbi WHERE Fecha BETWEEN '"+day1+"' AND '"+day2+"' OR Hora BETWEEN '"+hour1+"' AND '"+hour2+"'", function(error, data, fileds){
 		if(error){
 			console.log(error);
 		}else{
