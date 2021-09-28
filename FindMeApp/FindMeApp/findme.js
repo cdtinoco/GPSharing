@@ -6,7 +6,7 @@ const socket = dgram.createSocket('udp4');
 const sys = require('child_process');
 const moment = require('moment');
 require('dotenv').config();
-
+//comentario
 //CONFIGURACIÓN.
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
@@ -63,6 +63,7 @@ app.get('/data', function(req, res){
 app.get('/history', function(req, res){
 	var date1 = req.query.date1;
 	var date2 = req.query.date2;
+	
 
 	var day1 = moment(date1).format('YYYY-MM-DD');
 	var hour1 = moment(date1).format('HH:mm');
