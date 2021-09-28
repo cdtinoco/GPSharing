@@ -22,8 +22,15 @@ const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   
 centerBtn.addEventListener('click', function(e){
 	e.preventDefault();
-	seted = false;
-	createMap(actual[0][0], actual[0][1]);
+
+    //Setear Latitud-Longitud.
+    if(mymap){
+	    mymap.setView([actual[0], actual[1]], 13);
+	    L.tileLayer(tiles, {
+	        maxZoom: 18,
+	    }).addTo(mymap);
+	    seted = true;
+    }
 });
 
 historyBtn.addEventListener('click', function(e){
@@ -63,8 +70,8 @@ function peticion(){
 	http.onreadystatechange = function(){
 	 	if(this.readyState == 4 && this.status == 200){
 			var resultado = JSON.parse(this.responseText);
-			actual[0] = [resultado.Latitud, resultado.Longitud];
 			if(past == false){
+				actual = [resultado.Latitud, resultado.Longitud];
 				Latitud.innerHTML = resultado.Latitud;
 				Longitud.innerHTML= resultado.Longitud;
 				//Limitar los caracteres.
@@ -118,15 +125,26 @@ function createMap(lat, lng){
     marker.addTo(mymap);
 }
 
-function history(data){
+function history(data, lat, lng){
 	removeAll();
+
+	if(seted == false && lat != null && lng != null){
+	    //Setear Latitud-Longitud.
+	    mymap.setView([lat, lng], 13);
+	    L.tileLayer(tiles, {
+	        maxZoom: 18,
+	    }).addTo(mymap);
+	    seted = true;
+    }
+
 	var final = new Array();
 	var cont = 0;
 	for(var n=0; n<data.length; n++){
 		final.push([data[n].Latitud, data[n].Longitud]);
 		if(n == data.length - 1){
-			//Marcador.
+			//Marcador y última coordenada.
 		    marker = L.marker([data[n].Latitud, data[n].Longitud]);
+		    actual = [data[n].Latitud, data[n].Longitud];
 		    marker.addTo(mymap);
 		}
 	}
