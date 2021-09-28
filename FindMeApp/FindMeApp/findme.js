@@ -43,7 +43,7 @@ socket.on('message', (msg, rinfo) => {
 });  
 socket.bind(50000)
 
-//RUTAS.
+//RUTAS
 
 app.get('/', function(req, res){
 	res.render('index');
