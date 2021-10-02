@@ -72,8 +72,8 @@ app.get('/history', function(req, res){
 	var day2 = moment(date2).format('YYYY-MM-DD HH:mm');
 	//var hour2 = moment(date2).format('HH:mm');
 
-	console.log(hour1);
-	console.log(hour2);
+	console.log(day1);
+	console.log(day2);
 	
 	connection.query("SELECT * FROM registroUbi WHERE Fecha BETWEEN '"+day1+"' AND '"+day2+"'", function(error, data, fileds){
 		if(error){
