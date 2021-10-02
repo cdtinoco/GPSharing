@@ -35,7 +35,9 @@ socket.on('message', (msg, rinfo) => {
   Longitud = msg.toString().split(' ')[3];
   Fecha = msg.toString().split(' ')[5];
   Hora = msg.toString().split(' ')[6];
-  connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, Fecha, Hora) VALUE ("'+Latitud+'","'+Longitud+'","'+Fecha+'","'+Hora+'")', function(error, data, fileds){
+  TS = Fecha.concat(" "+Hora);
+  console.log(TS)
+  connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp) VALUE ("'+Latitud+'","'+Longitud+'","'+TS+'")', function(error, data, fileds){
 	  if(error){
 		  console.log("An error has occured: ", error)
 	  }
@@ -65,15 +67,15 @@ app.get('/history', function(req, res){
 	var date2 = req.query.date2;
 	
 
-	var day1 = moment(date1).format('YYYY-MM-DD');
-	var hour1 = moment(date1).format('HH:mm');
-	var day2 = moment(date2).format('YYYY-MM-DD');
-	var hour2 = moment(date2).format('HH:mm');
+	var day1 = moment(date1).format('YYYY-MM-DD HH:mm');
+	//var hour1 = moment(date1).format('HH:mm');
+	var day2 = moment(date2).format('YYYY-MM-DD HH:mm');
+	//var hour2 = moment(date2).format('HH:mm');
 
 	console.log(hour1);
 	console.log(hour2);
 	
-	connection.query("SELECT * FROM registroUbi WHERE Fecha BETWEEN '"+day1+"' AND '"+day2+"' OR Hora BETWEEN '"+hour1+"' AND '"+hour2+"'", function(error, data, fileds){
+	connection.query("SELECT * FROM registroUbi WHERE Fecha BETWEEN '"+day1+"' AND '"+day2+"'", function(error, data, fileds){
 		if(error){
 			console.log(error);
 		}else{
