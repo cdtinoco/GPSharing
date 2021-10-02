@@ -3,7 +3,6 @@ var Latitud = document.getElementById("Latitud");
 var Longitud = document.getElementById("Longitud");
 //var Fecha = document.getElementById("Fecha");
 //var Hora = document.getElementById("Hora");
-//var TS = document.getElementById("TS");
 const centerBtn = document.getElementById('centerBtn');
 const infoDiv = document.getElementById('infoDiv');
 const historyBtn = document.getElementById('historyBtn');
@@ -88,7 +87,7 @@ function peticion(){
 				//Fecha.innerHTML = txDate;
 				Latitud.innerHTML = txLat;
 				Longitud.innerHTML = txLng;
-				//TS.innerHTML = resultado.TS;
+				//Hora.innerHTML = resultado.Hora;
 				createMap(resultado.Latitud, resultado.Longitud);	
 			}else{
 				//Seguir llenando el vector de polilinea.

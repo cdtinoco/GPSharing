@@ -36,7 +36,6 @@ socket.on('message', (msg, rinfo) => {
   Fecha = msg.toString().split(' ')[5];
   Hora = msg.toString().split(' ')[6];
   TS = Fecha.concat(" "+Hora);
-  console.log(TS)
   connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp) VALUE ("'+Latitud+'","'+Longitud+'","'+TS+'")', function(error, data, fileds){
 	  if(error){
 		  console.log("An error has occured: ", error)
@@ -75,7 +74,7 @@ app.get('/history', function(req, res){
 	console.log(day1);
 	console.log(day2);
 	
-	connection.query("SELECT * FROM registroUbi WHERE Fecha BETWEEN '"+day1+"' AND '"+day2+"'", function(error, data, fileds){
+	connection.query("SELECT * FROM registroUbi WHERE TimeStamp BETWEEN '"+day1+"' AND '"+day2+"'", function(error, data, fileds){
 		if(error){
 			console.log(error);
 		}else{
