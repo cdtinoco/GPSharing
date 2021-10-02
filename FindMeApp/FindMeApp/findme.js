@@ -27,7 +27,7 @@ connection.connect(function(error){
 		console.log("Connection created successfully.");
 	}
 });
-//COMENTARIO
+//COMENT
 //Datagram Socket de recepción.
 socket.on('message', (msg, rinfo) => {
   console.log(`${msg}`);
