@@ -1,8 +1,9 @@
 
 var Latitud = document.getElementById("Latitud");
 var Longitud = document.getElementById("Longitud");
-var Fecha = document.getElementById("Fecha");
-var Hora = document.getElementById("Hora");
+//var Fecha = document.getElementById("Fecha");
+//var Hora = document.getElementById("Hora");
+var TS = document.getElementById("TS");
 const centerBtn = document.getElementById('centerBtn');
 const infoDiv = document.getElementById('infoDiv');
 const historyBtn = document.getElementById('historyBtn');
@@ -75,19 +76,19 @@ function peticion(){
 				Latitud.innerHTML = resultado.Latitud;
 				Longitud.innerHTML= resultado.Longitud;
 				//Limitar los caracteres.
-				var txDate = "";
+				//var txDate = "";
 				var txLat = "";
 				var txLng = "";
 				for(var n=0; n<10; n++){
-					txDate += resultado.Fecha[n];
+					//txDate += resultado.Fecha[n];
 					txLat += resultado.Latitud[n];
 					txLng += resultado.Longitud[n];
 				}
 				
-				Fecha.innerHTML = txDate;
+				//Fecha.innerHTML = txDate;
 				Latitud.innerHTML = txLat;
 				Longitud.innerHTML = txLng;
-				Hora.innerHTML = resultado.Hora;
+				TS.innerHTML = resultado.TS;
 				createMap(resultado.Latitud, resultado.Longitud);	
 			}else{
 				//Seguir llenando el vector de polilinea.
