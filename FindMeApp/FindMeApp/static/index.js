@@ -88,7 +88,7 @@ function peticion(){
 				//Fecha.innerHTML = txDate;
 				Latitud.innerHTML = txLat;
 				Longitud.innerHTML = txLng;
-				//TimeStamp.innerHTML = resultado.TimeStamp;
+				TimeStamp.innerHTML = resultado.TimeStamp;
 				createMap(resultado.Latitud, resultado.Longitud);	
 			}else{
 				//Seguir llenando el vector de polilinea.
