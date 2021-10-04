@@ -1,9 +1,8 @@
 
 var Latitud = document.getElementById("Latitud");
 var Longitud = document.getElementById("Longitud");
-var TS = document.getElementById("TimeStamp");
-//var Fecha = document.getElementById("Fecha");
-//var Hora = document.getElementById("Hora");
+var TimeStamp = document.getElementById("TimeStamp");
+var TS = document.getElementById("TS");
 const centerBtn = document.getElementById('centerBtn');
 const infoDiv = document.getElementById('infoDiv');
 const historyBtn = document.getElementById('historyBtn');
@@ -87,7 +86,10 @@ function peticion(){
 				for(var n=0; n<19; n++){
 					txTimeStamp += resultado.TimeStamp[n];
 				}
-				TimeStamp.innerHTML = txTimeStamp;
+				TSD = txTimeStamp.split("T")[0];
+				TST = txTimeStamp.split("T")[1];
+				txTS = TSD.concat(" "+TST);
+				TimeStamp.innerHTML = txTS;
 				Latitud.innerHTML = txLat;
 				Longitud.innerHTML = txLng;
 				createMap(resultado.Latitud, resultado.Longitud);	

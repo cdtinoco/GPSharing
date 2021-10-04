@@ -67,9 +67,7 @@ app.get('/history', function(req, res){
 	
 
 	var day1 = moment(date1).format('YYYY-MM-DD HH:mm');
-	//var hour1 = moment(date1).format('HH:mm');
 	var day2 = moment(date2).format('YYYY-MM-DD HH:mm');
-	//var hour2 = moment(date2).format('HH:mm');
 
 	console.log(day1);
 	console.log(day2);
