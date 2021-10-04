@@ -78,10 +78,22 @@ function peticion(){
 				
 				var txLat = "";
 				var txLng = "";
-				for(var n=0; n<10; n++){
-					txLat += resultado.Latitud[n];
-					txLng += resultado.Longitud[n];
+				if (resultado.Latitud.length>=10) {
+					for(var n=0; n<10; n++){
+						txLat += resultado.Latitud[n];
+					}					
+				}else{
+					txLat = resultado.Latitud;
 				}
+				if (resultado.Longitud.length>=10) {
+					for(var n=0; n<10; n++){
+						txLng += resultado.Longitud[n];
+					}					
+				}else{
+					txLng = resultado.Longitud;
+				}
+				Latitud.innerHTML = txLat;
+				Longitud.innerHTML = txLng;
 				var txTimeStamp = "";
 				for(var n=0; n<19; n++){
 					txTimeStamp += resultado.TimeStamp[n];
@@ -90,8 +102,6 @@ function peticion(){
 				TST = txTimeStamp.split("T")[1];
 				txTS = TSD.concat(" "+TST);
 				TimeStamp.innerHTML = txTS;
-				Latitud.innerHTML = txLat;
-				Longitud.innerHTML = txLng;
 				createMap(resultado.Latitud, resultado.Longitud);	
 			}else{
 				//Seguir llenando el vector de polilinea.
