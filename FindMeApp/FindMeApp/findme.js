@@ -6,7 +6,7 @@ const socket = dgram.createSocket('udp4');
 const sys = require('child_process');
 require('dotenv').config();
 
-//CONFIGURACIÓN.
+//CONFIGURACIÓN
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
 app.use(express.static('static'));
@@ -26,9 +26,9 @@ connection.connect(function(error){
 		console.log("Connection created successfully.");
 	}
 });
-// hola xd
 
-//Datagram Socket de recepción.
+
+//Datagram Socket de recepción
 socket.on('message', (msg, rinfo) => {
   console.log(`${msg}`);
   Latitud = msg.toString().split(' ')[1];
@@ -44,7 +44,7 @@ socket.on('message', (msg, rinfo) => {
 });  
 socket.bind(50000)
 
-//RUTAS.
+//RUTAS
 
 app.get('/', function(req, res){
 	res.render('index');
@@ -66,7 +66,7 @@ app.post('/autopull', function(req, res){
 	console.log("recibido")
 });
 
-//FIN.
+//FIN
 app.listen(app.get('port'), function(){
 	console.log("Server listening in port: ", app.get('port'));
 });
