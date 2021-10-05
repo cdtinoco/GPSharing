@@ -10,6 +10,9 @@ const Latitud2 = document.getElementById("Latitud2"),
 Longitud2 = document.getElementById("Longitud2"),
 TimeStamp2 = document.getElementById("TimeStamp2");
 
+const dateForm1 = document.getElementById('date1');
+const dateForm2 = document.getElementById('date2');
+
 const centerBtn = document.getElementById('centerBtn'),
 infoDiv = document.getElementById('infoDiv'),
 externalDiv = document.getElementById('external-div'),
@@ -26,7 +29,7 @@ var redline;
 var blueline;
 var redPolilines = new Array();
 var bluePolilines = new Array();
-const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; 
+const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   
 centerBtn.addEventListener('click', function(e){
 	e.preventDefault();
@@ -44,9 +47,8 @@ centerBtn.addEventListener('click', function(e){
 historyBtn.addEventListener('click', function(e){
 	e.preventDefault();
 
-	const date1 = document.getElementById('date1').value;
-	const date2 = document.getElementById('date2').value;
-
+	var date1 = dateForm1.value;
+	var date2 = dateForm2.value;
 	var http = new XMLHttpRequest();
 	http.open('GET', '/history?date1='+date1+'&date2='+date2);
 	http.onreadystatechange = function(){
@@ -84,6 +86,9 @@ returnBtn.addEventListener('click', function(e){
 });
 
 setInterval("peticion()", 3000);
+
+
+//FUNCTIONS.
 
 function peticion(){
 	const url = '/data'
@@ -217,4 +222,12 @@ function limitChars(resultado){
 	TST = txTimeStamp.split("T")[1];
 	txTS = TSD.concat(" "+TST);
 	return {'Latitud': txLat, 'Longitud': txLng, 'TimeStamp': txTS};
+}
+
+function restrictDate2(dateForm){
+	dateForm2.min = dateForm.value;
+}
+
+function restrictDate1(dateForm){
+	dateForm1.max = dateForm.value;
 }
