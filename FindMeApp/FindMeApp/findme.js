@@ -77,7 +77,11 @@ app.get('/history', function(req, res){
 			console.log(error);
 		}else{
 			console.log(data);
-			res.send(data);
+			if(data.length > 0){
+				res.send({'status': 1, 'data': data});
+			}else{
+				res.send({'status': 0, 'message': 'No se encontraron registros en este rango de fechas.'});
+			}
 		}
 	});
 });

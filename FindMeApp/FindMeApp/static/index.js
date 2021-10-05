@@ -53,9 +53,11 @@ historyBtn.addEventListener('click', function(e){
 	http.open('GET', '/history?date1='+date1+'&date2='+date2);
 	http.onreadystatechange = function(){
 		if(http.readyState == 4 && http.status == 200){
-			var data = http.responseText;
-			data = JSON.parse(data);
-			if(data){
+			var response = http.responseText;
+			response = JSON.parse(response);
+			
+			if(response.status == 1){
+				var data = response.data;
 				past = true;
 				infoDiv.style.display = 'none';
 				externalDiv.style.display = 'flex';
@@ -71,7 +73,7 @@ historyBtn.addEventListener('click', function(e){
 				Longitud2.innerHTML = response.Longitud;
 				TimeStamp2.innerHTML = response.TimeStamp;
 			}else{
-				alert("Parece que no hay datos en este rango de fecha.");
+				alert(response.message);
 			}
 		}
 	}
@@ -104,7 +106,7 @@ function peticion(){
 				Latitud.innerHTML = response.Latitud;
 				Longitud.innerHTML = response.Longitud;
 				TimeStamp.innerHTML = response.TimeStamp;
-				createMap(resultado.Latitud, resultado.Longitud);	
+				createMap(resultado.Latitud, resultado.Longitud);
 			}else{
 				//Seguir llenando el vector de polilinea.
 			    var temp = [resultado.Latitud, resultado.Longitud];
