@@ -194,7 +194,7 @@ function removeAll(){
         }
     }
 }
-
+//COMENTARIO
 function limitChars(resultado){
 	//Limitar los caracteres.
 	var txLat = "";
