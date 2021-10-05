@@ -1,12 +1,20 @@
+const Latitud = document.getElementById("Latitud"),
+Longitud = document.getElementById("Longitud"),
+TimeStamp = document.getElementById("TimeStamp");
 
-var Latitud = document.getElementById("Latitud");
-var Longitud = document.getElementById("Longitud");
-var TimeStamp = document.getElementById("TimeStamp");
-var TS = document.getElementById("TS");
-const centerBtn = document.getElementById('centerBtn');
-const infoDiv = document.getElementById('infoDiv');
-const historyBtn = document.getElementById('historyBtn');
-const returnBtn = document.getElementById('returnBtn');
+const Latitud1 = document.getElementById("Latitud1"),
+Longitud1 = document.getElementById("Longitud1"),
+TimeStamp1 = document.getElementById("TimeStamp1");
+
+const Latitud2 = document.getElementById("Latitud2"),
+Longitud2 = document.getElementById("Longitud2"),
+TimeStamp2 = document.getElementById("TimeStamp2");
+
+const centerBtn = document.getElementById('centerBtn'),
+infoDiv = document.getElementById('infoDiv'),
+externalDiv = document.getElementById('external-div'),
+historyBtn = document.getElementById('historyBtn'),
+returnBtn = document.getElementById('returnBtn');
 
 var mymap = L.map('mapa');
 var marker;
@@ -47,7 +55,19 @@ historyBtn.addEventListener('click', function(e){
 			data = JSON.parse(data);
 			if(data){
 				past = true;
+				infoDiv.style.display = 'none';
+				externalDiv.style.display = 'flex';
 				history(data);
+
+				var response = limitChars(data[0]);
+				Latitud1.innerHTML = response.Latitud;
+				Longitud1.innerHTML = response.Longitud;
+				TimeStamp1.innerHTML = response.TimeStamp;
+
+				response = limitChars(data[data.length-1]);
+				Latitud2.innerHTML = response.Latitud;
+				Longitud2.innerHTML = response.Longitud;
+				TimeStamp2.innerHTML = response.TimeStamp;
 			}else{
 				alert("Parece que no hay datos en este rango de fecha.");
 			}
@@ -58,6 +78,8 @@ historyBtn.addEventListener('click', function(e){
 
 returnBtn.addEventListener('click', function(e){
 	e.preventDefault();
+	infoDiv.style.display = 'block';
+	externalDiv.style.display = 'none';
 	past = false;
 });
 
@@ -72,36 +94,11 @@ function peticion(){
 			var resultado = JSON.parse(this.responseText);
 			if(past == false){
 				actual = [resultado.Latitud, resultado.Longitud];
-				Latitud.innerHTML = resultado.Latitud;
-				Longitud.innerHTML= resultado.Longitud;
-				//Limitar los caracteres.
-				
-				var txLat = "";
-				var txLng = "";
-				if (resultado.Latitud.length>=10) {
-					for(var n=0; n<10; n++){
-						txLat += resultado.Latitud[n];
-					}					
-				}else{
-					txLat = resultado.Latitud;
-				}
-				if (resultado.Longitud.length>=10) {
-					for(var n=0; n<10; n++){
-						txLng += resultado.Longitud[n];
-					}					
-				}else{
-					txLng = resultado.Longitud;
-				}
-				Latitud.innerHTML = txLat;
-				Longitud.innerHTML = txLng;
-				var txTimeStamp = "";
-				for(var n=0; n<19; n++){
-					txTimeStamp += resultado.TimeStamp[n];
-				}
-				TSD = txTimeStamp.split("T")[0];
-				TST = txTimeStamp.split("T")[1];
-				txTS = TSD.concat(" "+TST);
-				TimeStamp.innerHTML = txTS;
+
+				var response = limitChars(resultado);
+				Latitud.innerHTML = response.Latitud;
+				Longitud.innerHTML = response.Longitud;
+				TimeStamp.innerHTML = response.TimeStamp;
 				createMap(resultado.Latitud, resultado.Longitud);	
 			}else{
 				//Seguir llenando el vector de polilinea.
@@ -140,8 +137,11 @@ function createMap(lat, lng){
 }
 
 function history(data, lat, lng){
-	removeAll();
+	removeAll();	//Borrar todo lo anterior.
 
+	//Habilitar el div.
+	infoDiv.style.display = 'none';
+	externalDiv.style.display = 'flex';
 	if(seted == false && lat != null && lng != null){
 	    //Setear Latitud-Longitud.
 	    mymap.setView([lat, lng], 13);
@@ -155,13 +155,13 @@ function history(data, lat, lng){
 	var cont = 0;
 	for(var n=0; n<data.length; n++){
 		final.push([data[n].Latitud, data[n].Longitud]);
-		if(n == data.length - 1){
-			//Marcador y última coordenada.
-		    marker = L.marker([data[n].Latitud, data[n].Longitud]);
-		    actual = [data[n].Latitud, data[n].Longitud];
-		    marker.addTo(mymap);
-		}
 	}
+
+	//Marcador y última coordenada.
+    marker = L.marker([data[data.length - 1].Latitud, data[data.length - 1].Longitud]);
+    actual = [data[data.length - 1].Latitud, data[data.length - 1].Longitud];
+    marker.addTo(mymap);
+
 	console.log("Blue:");
 	console.log(final);
 	var blueline = L.polyline(final, {color: 'blue'}).addTo(mymap);
@@ -186,4 +186,35 @@ function removeAll(){
         	}
         }
     }
+}
+
+function limitChars(resultado){
+	//Limitar los caracteres.
+	var txLat = "";
+	var txLng = "";
+	if (resultado.Latitud.length>=10) {
+		for(var n=0; n<10; n++){
+			txLat += resultado.Latitud[n];
+		}					
+	}else{
+		txLat = resultado.Latitud;
+	}
+
+	if (resultado.Longitud.length>=10) {
+		for(var n=0; n<10; n++){
+			txLng += resultado.Longitud[n];
+		}					
+	}else{
+		txLng = resultado.Longitud;
+	}
+
+	var txTimeStamp = "";
+	for(var n=0; n<19; n++){
+		txTimeStamp += resultado.TimeStamp[n];
+	}
+
+	TSD = txTimeStamp.split("T")[0];
+	TST = txTimeStamp.split("T")[1];
+	txTS = TSD.concat(" "+TST);
+	return {'Latitud': txLat, 'Longitud': txLng, 'TimeStamp': txTS};
 }

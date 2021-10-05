@@ -76,47 +76,10 @@ nav > a:hover{
 }
 
 
-/* footer */
 
-footer{
-    background: #414141;
-    padding: 60px 0 30px 0;
-    margin: auto;
-    overflow: hidden;
-}
 
-.contenedor-footer{
-    display: flex;
-    width: 90%;
-    justify-content: space-evenly;
-    margin: auto;
-    padding-bottom: 50px;
-    border-bottom: 1px solid #ccc;
-}
 
-.content-foo{
-    text-align: center;
-}
-
-.content-foo h4{
-    color: #fff;
-    border-bottom: 3px solid #af20d3;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-}
-
-.content-foo p{
-    color: #ccc;
-}
-
-.titulo-final{
-    text-align: center;
-    font-size: 24px;
-    margin: 20px 0 0 0;
-    color: #9e9797;
-}
-
-#infoDiv{
+.infoDiv{
     min-height:50px;
     min-width:200px;
     max-width: 500px;
@@ -136,6 +99,14 @@ footer{
     justify-content: space-between;
     margin: 5px;
 }
+
+#external-div{
+    display: flex;
+}
+
+
+
+
 
 div#carHistory-form > div > button{
     border-radius: 10px;
