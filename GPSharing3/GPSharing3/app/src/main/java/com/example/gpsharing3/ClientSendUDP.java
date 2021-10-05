@@ -22,11 +22,11 @@ public class ClientSendUDP implements Runnable {
             InetAddress serverAddr4 = InetAddress.getByName("3.136.138.86");
             InetAddress serverAddr5 = InetAddress.getByName("18.190.106.33");
             byte[] buf = (MainActivity.miub.getText().toString()).getBytes();
-            DatagramPacket packet = new DatagramPacket(buf, buf.length,serverAddr, 50000);
-            DatagramPacket packet2 = new DatagramPacket(buf, buf.length,serverAddr2, 50000);
-            DatagramPacket packet3 = new DatagramPacket(buf, buf.length,serverAddr3, 50000);
-            DatagramPacket packet4 = new DatagramPacket(buf, buf.length,serverAddr4, 50000);
-            DatagramPacket packet5 = new DatagramPacket(buf, buf.length,serverAddr5, 50000);
+            DatagramPacket packet = new DatagramPacket(buf, buf.length, serverAddr, 50000);
+            DatagramPacket packet2 = new DatagramPacket(buf, buf.length, serverAddr2, 50000);
+            DatagramPacket packet3 = new DatagramPacket(buf, buf.length, serverAddr3, 50000);
+            DatagramPacket packet4 = new DatagramPacket(buf, buf.length, serverAddr4, 50000);
+            DatagramPacket packet5 = new DatagramPacket(buf, buf.length, serverAddr5, 50000);
             udpSocket.send(packet);
             udpSocket.send(packet2);
             udpSocket.send(packet3);
