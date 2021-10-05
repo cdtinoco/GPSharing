@@ -6,7 +6,12 @@ var Hora = document.getElementById("Hora");
 const centerBtn = document.getElementById('centerBtn');
 const infoDiv = document.getElementById('infoDiv');
 
-
+var mymap = L.map('mapa');
+var marker;
+var latlng = new Array();
+var actual = new Array();
+var seted = false;
+const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'; 
   
 centerBtn.addEventListener('click', function(e){
 	e.preventDefault();
