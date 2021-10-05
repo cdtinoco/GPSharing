@@ -36,7 +36,7 @@ centerBtn.addEventListener('click', function(e){
 
     //Setear Latitud-Longitud.
     if(mymap){
-	    mymap.setView([actual[0], actual[1]], getZoom());
+	    mymap.setView([actual[0], actual[1]], mymap.getZoom());
 	    L.tileLayer(tiles, {
 	        maxZoom: 18,
 	    }).addTo(mymap);
