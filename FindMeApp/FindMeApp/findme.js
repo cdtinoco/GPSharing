@@ -5,6 +5,7 @@ const dgram = require('dgram');
 const socket = dgram.createSocket('udp4');
 const sys = require('child_process');
 const moment = require('moment');
+var socketAdds = [0, 0];
 require('dotenv').config();
 
 //CONFIGURACIÓN.
@@ -29,19 +30,38 @@ connection.connect(function(error){
 });
 //Datagram Socket de recepción.
 socket.on('message', (msg, rinfo) => {
-  console.log(`${msg}`);
-  Latitud = msg.toString().split(' ')[1];
-  Longitud = msg.toString().split(' ')[3];
-  Fecha = msg.toString().split(' ')[5];
-  Hora = msg.toString().split(' ')[6];
-  TimeStamp = Fecha.concat(" "+Hora);
-  connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp) VALUE ("'+Latitud+'","'+Longitud+'","'+TimeStamp+'")', function(error, data, fileds){
-	  if(error){
-		  console.log("An error has occured: ", error)
-	  }
-  });
+	if (socketAdds[0] == 0 || socketAdds[0] == rinfo.address) {
+		socketAdds[0] = rinfo.address;
+		console.log(`${rinfo.address}`)	
+		console.log(`${msg}`);
+		Latitud = msg.toString().split(' ')[1];
+		Longitud = msg.toString().split(' ')[3];
+		Fecha = msg.toString().split(' ')[5];
+		Hora = msg.toString().split(' ')[6];
+		TimeStamp = Fecha.concat(" "+Hora);
+		connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp) VALUE ("'+Latitud+'","'+Longitud+'","'+TimeStamp+'")', function(error, data, fileds){
+			if(error){
+				console.log("An error has occured: ", error)
+			}
+		});
+	}else{
+		socketAdds[1] = rinfo.address;
+		console.log(`${rinfo.address}`)	
+		console.log(`${msg}`);
+		Latitudt2 = msg.toString().split(' ')[1];
+		Longitudt2 = msg.toString().split(' ')[3];
+		Fechat2 = msg.toString().split(' ')[5];
+		Horat2 = msg.toString().split(' ')[6];
+		TimeStampt2 = Fecha.concat(" "+Hora);
+		connection.query('INSERT INTO ubicacion.registroUbit2 (Latitudt2, Longitudt2, TimeStampt2) VALUE ("'+Latitudt2+'","'+Longitudt2+'","'+TimeStampt2+'")', function(error, data, fileds){
+			if(error){
+				console.log("An error has occured: ", error)
+			}
+		});
+	}
 });  
 socket.bind(50000)
+
 
 //RUTAS
 
