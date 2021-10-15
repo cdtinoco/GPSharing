@@ -35,7 +35,7 @@ socket.on('message', (msg, rinfo) => {
 	Longitud = msg.toString().split(' ')[3];
 	Fecha = msg.toString().split(' ')[5];
 	Hora = msg.toString().split(' ')[6];
-	Placa = msg.toString.split(' ')[7]
+	Placa = msg.toString().split(' ')[7];
 	TimeStamp = Fecha.concat(" "+Hora);
 	connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp, Placa) VALUE ("'+Latitud+'","'+Longitud+'","'+TimeStamp+'","'+Placa+'")', function(error, data, fileds){
 		if(error){
