@@ -29,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     static TextView miub;
     static Button env;
-    static EditText ipa;
+    static EditText letp;
+    static EditText nump;
 
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -44,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         miub = findViewById(R.id.textView3);
         env = findViewById(R.id.button);
-        ipa = findViewById(R.id.editTextTextPersonName);
+        letp = findViewById(R.id.editTextTextPersonName3);
+        nump = findViewById(R.id.editTextNumber);
 
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -55,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 try {
+
                     latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     String myLatitude = String.valueOf (location.getLatitude());
                     String myLongitude = String.valueOf(location.getLongitude());
