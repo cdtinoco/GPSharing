@@ -59,7 +59,6 @@ app.get('/data', function(req, res){
 	} else {
 		
 	}*/
-
 	connection.query('SELECT * FROM registroUbi WHERE idregistroUbi = (SELECT MAX(idregistroUbi) FROM registroUbi)', function(error, data, fileds){
 		if(error){
 			console.log(error);
