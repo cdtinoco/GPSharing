@@ -17,18 +17,21 @@ const centerBtn = document.getElementById('centerBtn'),
 infoDiv = document.getElementById('infoDiv'),
 externalDiv = document.getElementById('external-div'),
 historyBtn = document.getElementById('historyBtn'),
-returnBtn = document.getElementById('returnBtn');
+returnBtn = document.getElementById('returnBtn'),
+slider = document.getElementById('position-slider');
 
 var mymap = L.map('mapa');
 var marker;
+var retMarker;
 var latlng = new Array();
 var actual = new Array();
 var seted = false;
 var past = false;
-var redline;
-var blueline;
-var redPolilines = new Array();
-var bluePolilines = new Array();
+var redline;	//Polilinea roja.
+var blueline;	//Polilinea azul.
+var redPolilines = new Array();	//Array de polilineas rojas.
+var bluePolilines = new Array();	//Array de polilineas azules.
+var historyArray = new Array();
 const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   
 centerBtn.addEventListener('click', function(e){
@@ -58,6 +61,7 @@ historyBtn.addEventListener('click', function(e){
 
 			if(response.status == 1){
 				var data = response.data;
+				historyArray = data;
 				past = true;
 				infoDiv.style.display = 'none';
 				externalDiv.style.display = 'flex';
@@ -84,7 +88,36 @@ returnBtn.addEventListener('click', function(e){
 	e.preventDefault();
 	infoDiv.style.display = 'block';
 	externalDiv.style.display = 'none';
+	slider.style.display = 'none';
 	past = false;
+});
+
+slider.addEventListener('change', function(){
+	if(mymap){
+		if(retMarker){
+			mymap.removeLayer(retMarker);
+		}
+		const index = this.value;
+		const lat = historyArray[index].Latitud;
+		const lng = historyArray[index].Longitud;
+		var diahora = historyArray[index].TimeStamp.split('.')[0];
+		diahora = diahora.split('T');
+		const dia = diahora[0];
+		const hora = diahora[1];
+
+		var texto = `
+		<h5><strong>Latitud: </strong>${lat}</h5>
+		<br>
+		<h5><strong>Longitud: </strong>${lng}</h5>
+		<br>
+		<h5><strong>Día: </strong>${dia}</h5>
+		<br>
+		<h5><strong>Hora: </strong>${hora}</h5>
+		`;
+
+		retMarker = L.marker([lat, lng]);
+		retMarker.addTo(mymap).bindPopup(texto).openPopup();
+	}
 });
 
 setInterval("peticion()", 3000);
@@ -145,6 +178,9 @@ function createMap(lat, lng){
 
 function history(data, lat, lng){
 	removeAll();	//Borrar todo lo anterior.
+	slider.style.display = 'block';
+	slider.setAttribute('max', data.length - 1);
+	slider.setAttribute('value', value = data.length - 1);
 
 	//Habilitar el div.
 	infoDiv.style.display = 'none';
