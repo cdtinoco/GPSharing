@@ -32,24 +32,24 @@
 				<a href="#"><i class="icon ion-md-car"></i>Seleccionar vehiculo</a>
 				<a href="#"><i class="icon ion-md-map"></i>Distancia recorrida</a>
 			</nav> -->
-			<div id="masterContainer" class="container">
-				<h1 id="Titulo-principal" class="titulos">GPSharing</h1>
-				<p class="texto"></p>
-			<div class="contenedor" style="display:flex; justify-content:center;">
+			<h1 id="Titulo-principal" class="titulos">GPSharing</h1>
 		</header>
 
 		<main>
 			<section>
 				<div class="container">
 					<div class="container-fluid">
-						<div style="display:flex; justify-content:center;">
-							<div style="display:flex;">
-								<div id="carHistory-form" class="row">
-									<div class="col-9" style="display:flex; justify-content:space-between;">
-										<input type="datetime-local" id="date1" onchange="restrictDate2(this);">
-										<input type="datetime-local" id="date2" onchange="restrictDate1(this);">
-									</div>
-									<div class="col-3" style="display:flex; justify-content:space-between;">
+						<div id="carHistory-form-Container" style="display:flex; justify-content:center;">
+							<div id="carHistory-form" class="row">
+								<div class="col-12 col-sm-4">
+									<input type="datetime-local" id="date1" onchange="restrictDate2(this);">
+								</div>
+								<div class="col-0 col-sm-1"></div>
+								<div class="col-12 col-sm-4">
+									<input type="datetime-local" id="date2" onchange="restrictDate1(this);">
+								</div>
+								<div class="col-12 col-sm-3" style="display:flex; justify-content:flex-end; padding:0px;">
+									<div style="display:flex;">
 										<button id="historyBtn">Consultar</button>
 										<button id="returnBtn">Regresar</button>
 									</div>
@@ -132,6 +132,9 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div class="container-fluid" id="range-container">
+							<input type="range" id="position-slider" min="0" value="0" style="width:80%;">
 						</div>
 					</div>
 				</div>
