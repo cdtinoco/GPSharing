@@ -26,38 +26,47 @@
 
 	<body>
 		<header>
-			<nav>
+			<!--<nav>
 				<a href="#">Inicio</a>
 				<a href="#"><i class="icon ion-md-locate"></i>GPSharing</a>
 				<a href="#"><i class="icon ion-md-car"></i>Seleccionar vehiculo</a>
 				<a href="#"><i class="icon ion-md-map"></i>Distancia recorrida</a>
-			</nav>
-			<div id="masterContainer" class="container">
-				<h1 id="Titulo-principal" class="titulos">GPSharing</h1>
-				<p class="texto"></p>
-			<div class="contenedor" style="display:flex; justify-content:center;">
+			</nav> -->
+			<h1 id="Titulo-principal" class="titulos">GPSharing</h1>
 		</header>
 
 		<main>
 			<section>
 				<div class="container">
 					<div class="container-fluid">
-						<div style="display:flex; justify-content:center;">
-							<div style="display:flex;">
-								<input type="datetime-local" name="Date1">
-								<div style="width:10px;"></div>
-								<h6>-</h6>
-								<div style="width:10px;"></div>
-								<input type="datetime-local" name="Date2">
+						<div id="carHistory-form-Container" style="display:flex; justify-content:center;">
+							<div id="carHistory-form" class="row">
+								<div class="col-12 col-sm-4">
+									<input type="datetime-local" id="date1" onchange="restrictDate2(this);">
+								</div>
+								<div class="col-0 col-sm-1"></div>
+								<div class="col-12 col-sm-4">
+									<input type="datetime-local" id="date2" onchange="restrictDate1(this);">
+								</div>
+								<div class="col-12 col-sm-3" style="display:flex; justify-content:flex-end; padding:0px;">
+									<div style="display:flex;">
+										<button id="historyBtn">Consultar</button>
+										<button id="returnBtn">Regresar</button>
+									</div>
+								</div>
 							</div>
 						</div>
+
 						<div id="mapa" style="width:100%; height:500px; border: 2px solid black;">
 							<div class="leaflet-top leaflet-right">
-								<button id="centerBtn" style="border-radius:5px; border:2px solid black; font-weight:700; margin-right: 10px; margin-top: 10px; pointer-events:auto;"> Center </button>
+								<button id="centerBtn"> Center </button>
 							</div>
 							<div class="container-fluid leaflet-bottom" style="display:flex; justify-content:center; margin-bottom:5px;">
-								<div id="infoDiv">
+								<div id="infoDiv" class="infoDiv">
 									<div>
+										<div class="container" style="display:flex; justify-content:center; font-style:italic; text-decoration:underline;">
+											<h6>Tiempo real:</h6>
+										</div>
 										<div class="container" style="display:flex; justify-content: space-between;">
 											<div class="infoDiv-item">
 												<h6 class="infoH6" style="font-weight:700;">Lat: </h6>
@@ -70,17 +79,62 @@
 										</div>
 										<div class="container" style="display:flex; justify-content: space-between;">
 											<div class="infoDiv-item">
-												<h6 class="infoH6" style="font-weight:700;">Fecha: </h6>
-												<h6 class="infoH6" id="Fecha"></h6>
+												<h6 class="infoH6" style="font-weight:700;">TimeStamp: </h6>
+												<h6 class="infoH6" id="TimeStamp"></h6>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div id="external-div" style="display:none;">
+									<div id="internal-div1" class="infoDiv" style="background: rgba(255, 47, 38, 0.7);">
+										<div class="container" style="display:flex; justify-content:center; font-style:italic; text-decoration:underline;">
+											<h6>Incio:</h6>
+										</div>
+										<div class="container" style="display:flex; justify-content: space-between;">
+											<div class="infoDiv-item">
+												<h6 class="infoH6" style="font-weight:700;">Lat: </h6>
+												<h6 class="infoH6" id="Latitud1"></h6>
 											</div>
 											<div class="infoDiv-item">
-												<h6 class="infoH6" style="font-weight:700;">Hora: </h6>
-												<h6 class="infoH6" id="Hora"></h6>
+												<h6 class="infoH6" style="font-weight:700;">Lng: </h6>
+												<h6 class="infoH6" id="Longitud1"></h6>
+											</div>
+										</div>
+										<div class="container" style="display:flex; justify-content: space-between;">
+											<div class="infoDiv-item">
+												<h6 class="infoH6" style="font-weight:700;">TimeStamp: </h6>
+												<h6 class="infoH6" id="TimeStamp1"></h6>
+											</div>
+										</div>
+									</div>
+									<div style="width: 5px;"></div>
+									<div id="internal-div2" class="infoDiv" style="background: rgba(38, 140, 255, 0.7);">
+										<div class="container" style="display:flex; justify-content:center; font-style:italic; text-decoration:underline;">
+											<h6>Final:</h6>
+										</div>
+										<div class="container" style="display:flex; justify-content: space-between;">
+											<div class="infoDiv-item">
+												<h6 class="infoH6" style="font-weight:700;">Lat: </h6>
+												<h6 class="infoH6" id="Latitud2"></h6>
+											</div>
+											<div class="infoDiv-item">
+												<h6 class="infoH6" style="font-weight:700;">Lng: </h6>
+												<h6 class="infoH6" id="Longitud2"></h6>
+											</div>
+										</div>
+										<div class="container" style="display:flex; justify-content: space-between;">
+											<div class="infoDiv-item">
+												<h6 class="infoH6" style="font-weight:700;">TimeStamp: </h6>
+												<h6 class="infoH6" id="TimeStamp2"></h6>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
+						</div>
+						<div class="container-fluid" id="range-container">
+							<input type="range" id="position-slider" min="0" value="0" style="width:80%;">
 						</div>
 					</div>
 				</div>
