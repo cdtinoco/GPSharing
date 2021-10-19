@@ -32,6 +32,7 @@ var blueline;	//Polilinea azul.
 var redPolilines = new Array();	//Array de polilineas rojas.
 var bluePolilines = new Array();	//Array de polilineas azules.
 var historyArray = new Array();
+var selectedCar = "";
 const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   
 centerBtn.addEventListener('click', function(e){
@@ -133,13 +134,19 @@ function peticion(){
 	 	if(this.readyState == 4 && this.status == 200){
 			var resultado = JSON.parse(this.responseText);
 			if(past == false){
-				actual = [resultado.Latitud, resultado.Longitud];
-
-				var response = limitChars(resultado);
-				Latitud.innerHTML = response.Latitud;
-				Longitud.innerHTML = response.Longitud;
-				TimeStamp.innerHTML = response.TimeStamp;
-				createMap(resultado.Latitud, resultado.Longitud);
+				if(selectedCar){
+					for(var car of resultado){
+						if(car.Placa == selectedCar){
+							actual = [car.Latitud, car.Longitud];
+							var response = limitChars(car);
+							Latitud.innerHTML = response.Latitud;
+							Longitud.innerHTML = response.Longitud;
+							TimeStamp.innerHTML = response.TimeStamp;
+						}
+					}
+				}
+				console.log("Hola en Petición...");
+				createMap(resultado);
 			}else{
 				//Seguir llenando el vector de polilinea.
 			    var temp = [resultado.Latitud, resultado.Longitud];
@@ -153,27 +160,74 @@ function peticion(){
 	http.send(null);
 }
 
-function createMap(lat, lng){
+function createMap(resultado){
 	//Eliminar marcadores anteriores.
     removeAll();
+
+    var min = 0;
+    var max = 0;
+    var middleLat;
+    for(var car of resultado){
+    	if(car.Latitud <= min){
+    		min = car.Latitud;
+    	}
+    	if(car.Latitud >= max){
+    		max = car.Latitud;
+    	}
+    }
+    middleLat = (min + max)/2;
+
+    min = 0;
+    max = 0;
+    var middleLng;
+    for(var car of resultado){
+    	if(car.Longitud <= min){
+    		min = car.Longitud;
+    	}
+    	if(car.Longitud >= max){
+    		max = car.Longitud;
+    	}
+    }
+    middleLng = (min + max)/2;
+
     if(seted == false){
 	    //Setear Latitud-Longitud.
-	    mymap.setView([lat, lng], 13);
+	    mymap.setView([middleLat, middleLng], 13);
 	    L.tileLayer(tiles, {
 	        maxZoom: 18,
 	    }).addTo(mymap);
 	    seted = true;
     }
     
-    //Polilinea.
-    var temp = [lat, lng];
-    latlng.push(temp);
-    var polyline = L.polyline(latlng, {color: 'red'}).addTo(mymap);
-    redPolilines.push(polyline);
+    //Polilineas.
+    for(var car of resultado){
+    	var index = latlng.indexOf(car.Placa);
+    	if(index < 0){
+    		index = latlng.length;
+    		latlng.push([car.Placa]);
+    		latlng[index].push([car.Latitud, car.Longitud]);
+    		console.log(latlng);
+    		var polyline = L.polyline(latlng[index], {color: 'red'}).addTo(mymap);
+    		redPolilines.push(polyline);
 
-    //Marcador.
-    marker = L.marker([lat, lng]);
-    marker.addTo(mymap);
+    		//Marcador.
+    		/*
+		    marker = L.marker([car.Longitud, car.Latitud]);
+		    marker.addTo(mymap);
+		    */
+    	}else{
+		    latlng[index].push([car.Latitud, car.Longitud]);
+		    console.log(latlng);
+		    var polyline = L.polyline(latlng[index], {color: 'red'}).addTo(mymap);
+		    redPolilines.push(polyline);
+
+		    //Marcador.
+		    /*
+		    marker = L.marker([car.Longitud, car.Latitud]);
+		    marker.addTo(mymap);
+		    */
+    	}
+    }
 }
 
 function history(data, lat, lng){

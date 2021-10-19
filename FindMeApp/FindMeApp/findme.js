@@ -37,9 +37,22 @@ socket.on('message', (msg, rinfo) => {
 	Hora = msg.toString().split(' ')[6];
 	Placa = msg.toString().split(' ')[7];
 	TimeStamp = Fecha.concat(" "+Hora);
+	connection.query(`SELECT * FROM ubicacion.registroPlaca WHERE placa = ${Placa}`, function(error, data, fileds){
+		if(error){
+			console.log("Ha ocurrido un error al consultar la placa: ", error);
+		}else{
+			if(data.length == 0){
+				connection.query(`INSERT INTO ubicacion.registroPlaca (Placa, Fecha) VALUE ('${Placa}', '${TimeStamp}')`, function(error, data, fields){
+					if(error){
+						console.log("Ha ocurrido un error al registrar la placa: ", error);
+					}
+				});
+			}
+		}
+	});
 	connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp, Placa) VALUE ("'+Latitud+'","'+Longitud+'","'+TimeStamp+'","'+Placa+'")', function(error, data, fileds){
 		if(error){
-			console.log("An error has occured: ", error)
+			console.log("An error has occured: ", error);
 		}
 	});
 });  
@@ -53,21 +66,43 @@ app.get('/', function(req, res){
 
 app.get('/data', function(req, res){
 	//INCLUIR PLACA EN LA CONSULTA
-	/*var placa = req.query.placa;
+	var placa = req.query.placa;
 	if (placa) {
-		
-	} else {
-		
-	}*/
-
-	connection.query('SELECT * FROM registroUbi WHERE idregistroUbi = (SELECT MAX(idregistroUbi) FROM registroUbi)', function(error, data, fileds){
-		if(error){
-			console.log(error);
-		}else{
-			console.log(data);
-			res.send(data[0]);
-		}
-	});
+		console.log("Entro a placas.");
+		connection.query(`SELECT * FROM registroUbi WHERE  Placa = ${Placa} AND idregistroUbi = (SELECT MAX(idregistroUbi) FROM registroUbi)`, function(error, data, fileds){
+			if(error){
+				console.log(error);
+			}else{
+				console.log(data);
+				res.send(data[0]);
+			}
+		});
+	}else{
+		console.log("Entro a NO placas.");
+		connection.query(`SELECT * FROM ubicacion.registroPlaca`, function(error, data, fields){
+			if(error){
+				console.log("Error en consulta de varias placas: ", error);
+			}else{
+				console.log("Esto es DATA:");
+				console.log(data);
+				var registrosArray = new Array();
+				var cont = 0;
+				for(var placa of data){
+					var number = placa.NuevaPlaca;
+					getOneCar(number).then(function(response){
+						registrosArray.push(response);
+						if(cont < data.length - 1){
+							cont++;
+						}else{
+							console.log("TOTAL DE LA CONSULTA...");
+							console.log(registrosArray);
+							res.send(registrosArray);
+						}
+					});	
+				}		
+			}
+		});
+	}
 });
 
 app.get('/history', function(req, res){
@@ -99,6 +134,21 @@ app.post('/autopull', function(req, res){
 	console.log(sys.exec("cd /home/ubuntu/projects/GPSharing && git reset --hard && git pull").exitCode);
 	console.log("recibido")
 });
+
+
+//FUNCIONES.
+function getOneCar(placa){
+	return new Promise(function(resolve, reject){
+		connection.query(`SELECT * FROM ubicacion.registroUbi WHERE idregistroUbi = (SELECT MAX(idregistroUbi) FROM ubicacion.registroUbi WHERE Placa = '${placa}')`, function(error, data, fields){
+			if(error){
+				console.log("Error in query: ", error);
+			}else{
+				resolve(data[0]);
+			}
+		});
+	});
+}
+
 
 //FIN.
 app.listen(app.get('port'), function(){
