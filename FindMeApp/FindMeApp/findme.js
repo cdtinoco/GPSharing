@@ -8,7 +8,7 @@ const moment = require('moment');
 var socketAdds = [0, 0];
 require('dotenv').config();
 
-//CONFIGURACIÓN.
+//CONFIGURACIÓN
 app.set('port', process.env.PORT || 3000);
 app.set('view engine', 'ejs');
 app.use(express.static('static'));
@@ -100,7 +100,19 @@ app.post('/autopull', function(req, res){
 	console.log("recibido")
 });
 
-//FIN.
+//FUNCIONES.
+function getOneCar(placa){
+	return new Promise(function(resolve, reject){
+		connection.query(`SELECT * FROM ubicacion.registroUbi WHERE idregistroUbi = (SELECT MAX(idregistroUbi) FROM ubicacion.registroUbi WHERE Placa = '${placa}')`, function(error, data, fields){
+			if(error){
+				console.log("Error in query: ", error);
+			}else{
+				resolve(data[0]);
+			}
+		});
+	});
+}
+
 app.listen(app.get('port'), function(){
 	console.log("Server listening in port: ", app.get('port'));
 });
