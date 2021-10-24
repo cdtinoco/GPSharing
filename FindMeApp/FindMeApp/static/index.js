@@ -29,8 +29,7 @@ var seted = false;
 var past = false;
 var redline;	//Polilinea roja.
 var blueline;	//Polilinea azul.
-var redPolilines = new Array();	//Array de polilineas rojas.
-var bluePolilines = new Array();	//Array de polilineas azules.
+var polylines = new Array(); //Array de polilineas en general.
 var historyArray = new Array();
 const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
   
@@ -63,9 +62,14 @@ historyBtn.addEventListener('click', function(e){
 				var data = response.data;
 				historyArray = data;
 				past = true;
-				infoDiv.style.display = 'none';
-				externalDiv.style.display = 'flex';
-				history(data);
+				const last = [data[data.length - 1].Latitud, data[data.length - 1].Longitud];
+				setHistoryItems(data.length-1, last[0], last[1]);	//Habilitar items.
+				//history(data);
+				//Separar polilineas por auto.
+				var matrix = separatePolylines(data);
+				for(var car of matrix){
+					createPoly(car.vector, randomColor());
+				}
 
 				var response = limitChars(data[0]);
 				Latitud1.innerHTML = response.Latitud;
@@ -135,15 +139,21 @@ function peticion(){
 			if(past == false){
 				actual = [resultado.Latitud, resultado.Longitud];
 
-				var response = limitChars(resultado);
+				//Mostrar los resultados.
+				var response = limitChars(resultado);	//Limitar las cifras significativas.
 				Latitud.innerHTML = response.Latitud;
 				Longitud.innerHTML = response.Longitud;
 				TimeStamp.innerHTML = response.TimeStamp;
+
+				//Crear el mapa.
 				createMap(resultado.Latitud, resultado.Longitud);
+
+				//Crear la polilinea.
+				latlng.push([resultado.Latitud, resultado.Longitud]);
+				createPoly(latlng, 'red');
 			}else{
 				//Seguir llenando el vector de polilinea.
-			    var temp = [resultado.Latitud, resultado.Longitud];
-			    latlng.push(temp);
+			    latlng.push(resultado.Latitud, resultado.Longitud);
 			}
 		}else{
 			console.log("readyState: ", http.readyState);
@@ -151,6 +161,15 @@ function peticion(){
 		}
 	}
 	http.send(null);
+}
+
+function randomColor(){
+	var letters = '0123456789ABCDEF';
+	var color = '#';
+	for (var i=0; i<6; i++) {
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
 }
 
 function createMap(lat, lng){
@@ -164,51 +183,71 @@ function createMap(lat, lng){
 	    }).addTo(mymap);
 	    seted = true;
     }
-    
-    //Polilinea.
-    var temp = [lat, lng];
-    latlng.push(temp);
-    var polyline = L.polyline(latlng, {color: 'red'}).addTo(mymap);
-    redPolilines.push(polyline);
+}
+
+function createPoly(vector, color){
+	//Polilinea.
+	var polyline = L.polyline(vector, {'color': color}).addTo(mymap);
+	polylines.push(polyline);
 
     //Marcador.
-    marker = L.marker([lat, lng]);
+	const lat = vector[vector.length - 1][0];
+	const lng = vector[vector.length - 1][1];
+	const icon = L.divIcon({className: 'my-div-icon',
+	html: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill marker-div-icon" style="color:${color};" viewBox="0 0 16 16">
+	<path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+  </svg>`});
+    marker = L.marker([lat, lng], {icon: icon});
     marker.addTo(mymap);
 }
 
-function history(data, lat, lng){
-	removeAll();	//Borrar todo lo anterior.
-	slider.style.display = 'block';
-	slider.setAttribute('max', data.length - 1);
-	slider.setAttribute('value', value = data.length - 1);
-
-	//Habilitar el div.
-	infoDiv.style.display = 'none';
-	externalDiv.style.display = 'flex';
-	if(seted == false && lat != null && lng != null){
-	    //Setear Latitud-Longitud.
-	    mymap.setView([lat, lng], 13);
-	    L.tileLayer(tiles, {
-	        maxZoom: 18,
-	    }).addTo(mymap);
-	    seted = true;
-    }
-
+function history(data){
 	var final = new Array();
-	var cont = 0;
 	for(var n=0; n<data.length; n++){
 		final.push([data[n].Latitud, data[n].Longitud]);
 	}
+	createPoly(final, "blue");
 
 	//Marcador y última coordenada.
-    marker = L.marker([data[data.length - 1].Latitud, data[data.length - 1].Longitud]);
-    actual = [data[data.length - 1].Latitud, data[data.length - 1].Longitud];
-    marker.addTo(mymap);
+    actual = [last[0], last[1]];
+}
 
-	console.log("Blue:");
-	console.log(final);
-	var blueline = L.polyline(final, {color: 'blue'}).addTo(mymap);
-	bluePolilines.push(blueline);
+function setHistoryItems(tam, lat, lng){
+	slider.style.display = 'block';
+	slider.setAttribute('max', tam);
+	slider.setAttribute('value', tam);
+
+	infoDiv.style.display = 'none';
+	externalDiv.style.display = 'flex';
+
+	createMap(lat, lng);	//Crear mapa.
+}
+
+function separatePolylines(data){
+	var placas = new Array();
+
+	//Registrar las matrices.
+	for(var car of data){
+		if(!placas.includes(car.Placa)){
+			placas.push(car.Placa);
+		}
+	}
+	console.log("PLACAS:");
+	console.log(placas);
+
+	var finalArray = new Array();
+	for(var placa of placas){
+		var temp = new Array();
+		for(var car of data){
+			if(car.Placa == placa){
+				temp.push([car.Latitud, car.Longitud]);
+			}
+		}
+		finalArray.push({'placa': placa, 'vector': temp});
+	}
+
+	console.log(finalArray);
+	return finalArray;
 }
 
 function removeAll(){
@@ -217,20 +256,19 @@ function removeAll(){
             mymap.removeLayer(marker);
         }
 
-        if(redPolilines){
-        	for(var line of redPolilines){
+        if(polylines){
+        	for(var line of polylines){
         		mymap.removeLayer(line);
         	}
         }
 
-        if(bluePolilines){
-        	for(var line of bluePolilines){
+        if(polylines){
+        	for(var line of polylines){
         		mymap.removeLayer(line);
         	}
         }
     }
 }
-//COMENTARIO
 function limitChars(resultado){
 	//Limitar los caracteres.
 	var txLat = "";
