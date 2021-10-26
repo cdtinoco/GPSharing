@@ -35,20 +35,6 @@ var realtimeIndex = 1;
 var realtimeArray = new Array();
 var realtimePlacas = new Array();
 const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-/*
-centerBtn.addEventListener('click', function(e){
-	e.preventDefault();
-
-    //Setear Latitud-Longitud.
-    if(mymap){
-	    mymap.setView([actual[0], actual[1]], mymap.getZoom());
-	    L.tileLayer(tiles, {
-	        maxZoom: 18,
-	    }).addTo(mymap);
-	    seted = true;
-    }
-});
-*/
 
 historyBtn.addEventListener('click', function(e){
 	e.preventDefault();
@@ -98,6 +84,7 @@ returnBtn.addEventListener('click', function(e){
 	externalDiv.style.display = 'none';
 	slider.style.display = 'none';
 	past = false;
+	removeAll();
 });
 
 slider.addEventListener('change', function(){
@@ -289,13 +276,13 @@ function removeAll(){
 	if(mymap){
         if(polylines){
         	for(var line of polylines){
-        		mymap.removeLayer(line);
+        		mymap.removeLayer(line.object);
         	}
         }
 
         if(markers){
-			for(var line of markers){
-				mymap.removeLayer(line);
+			for(var marker of markers){
+				mymap.removeLayer(marker);
 			}
 		}
 
