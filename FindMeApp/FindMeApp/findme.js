@@ -49,30 +49,26 @@ app.get('/', function(req, res){
 });
 
 app.get('/data', function(req, res){
-	/*
 	connection.query(`SELECT * FROM ubicacion.registroPlaca`, function(error, data){
 		if(error){
 			console.log("Error geting Placas: ", error);
 		}else{
 			console.log(data);
-			
+			var cont = 0;
+			var finalArray = new Array();
+			for(var i=0; i<data.length; i++){
+				getOneCar(data[i]).then(function(response){
+					finalArray.push(response);
+					if(cont == data.length - 1){
+						console.log(finalArray);
+						res.send(finalArray);
+					}else{
+						cont++;
+					}
+				});
+			}
 		}
 	});
-	*/
-	var data = ['HGU123', 'LKI123'];
-	var cont = 0;
-	var finalArray = new Array();
-	for(var i=0; i<data.length; i++){
-		getOneCar(data[i]).then(function(response){
-			finalArray.push(response);
-			if(cont == data.length - 1){
-				console.log(finalArray);
-				res.send(finalArray);
-			}else{
-				cont++;
-			}
-		});
-	}
 });
 
 app.get('/history', function(req, res){
