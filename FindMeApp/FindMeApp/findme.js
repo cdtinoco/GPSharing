@@ -37,12 +37,9 @@ socket.on('message', (msg, rinfo) => {
 	Hora = msg.toString().split(' ')[6];
 	Placa = msg.toString().split(' ')[7];
 	TimeStamp = Fecha.concat(" "+Hora);
-	connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp, Placa) VALUE ("'+Latitud+'","'+Longitud+'","'+TimeStamp+'","'+Placa+'")', function(error, data, fileds){
-		if(error){
-			console.log("An error has occured: ", error)
-		}
-	});
-});  
+	connection.query(`INSERT INTO ubicacion.registroPlaca (NuevaPlaca, FechaRegistro) VALUE ('${Placa}', '${TimeStamp}')`);
+	connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp, Placa) VALUE ("'+Latitud+'","'+Longitud+'","'+TimeStamp+'","'+Placa+'")');
+});
 socket.bind(50000)
 
 //RUTAS
@@ -52,22 +49,30 @@ app.get('/', function(req, res){
 });
 
 app.get('/data', function(req, res){
-	//INCLUIR PLACA EN LA CONSULTA
-	/*var placa = req.query.placa;
-	if (placa) {
-		
-	} else {
-		
-	}*/
-
-	connection.query('SELECT * FROM registroUbi WHERE idregistroUbi = (SELECT MAX(idregistroUbi) FROM registroUbi)', function(error, data, fileds){
+	/*
+	connection.query(`SELECT * FROM ubicacion.registroPlaca`, function(error, data){
 		if(error){
-			console.log(error);
+			console.log("Error geting Placas: ", error);
 		}else{
 			console.log(data);
-			res.send(data[0]);
+			
 		}
 	});
+	*/
+	var data = ['HGU123', 'LKI123'];
+	var cont = 0;
+	var finalArray = new Array();
+	for(var i=0; i<data.length; i++){
+		getOneCar(data[i]).then(function(response){
+			finalArray.push(response);
+			if(cont == data.length - 1){
+				console.log(finalArray);
+				res.send(finalArray);
+			}else{
+				cont++;
+			}
+		});
+	}
 });
 
 app.get('/history', function(req, res){

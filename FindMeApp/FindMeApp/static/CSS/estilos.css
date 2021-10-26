@@ -23,7 +23,7 @@ body {
 
     position: absolute;
     top: -35px;
-    left: -15px;
+    left: -14px;
 }
 
 .titulo {
@@ -159,6 +159,14 @@ div#carHistory-form > div > div > button{
 
     display: flex;
     justify-content: center;
+}
+
+.selected-marker{
+    opacity: 1;
+}
+
+.non-selected-marker{
+    opacity: 0.7;
 }
 
 

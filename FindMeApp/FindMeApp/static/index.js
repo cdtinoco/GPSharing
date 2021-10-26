@@ -23,16 +23,19 @@ slider = document.getElementById('position-slider');
 var mymap = L.map('mapa');
 var marker;
 var retMarker;
+var markers = new Array();
 var latlng = new Array();
 var actual = new Array();
 var seted = false;
 var past = false;
-var redline;	//Polilinea roja.
-var blueline;	//Polilinea azul.
 var polylines = new Array(); //Array de polilineas en general.
-var historyArray = new Array();
+var historyObject = new Array();
+var historyIndex = 0;
+var realtimeIndex = 1;
+var realtimeArray = new Array();
+var realtimePlacas = new Array();
 const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-  
+/*
 centerBtn.addEventListener('click', function(e){
 	e.preventDefault();
 
@@ -45,6 +48,7 @@ centerBtn.addEventListener('click', function(e){
 	    seted = true;
     }
 });
+*/
 
 historyBtn.addEventListener('click', function(e){
 	e.preventDefault();
@@ -60,26 +64,26 @@ historyBtn.addEventListener('click', function(e){
 
 			if(response.status == 1){
 				var data = response.data;
-				historyArray = data;
 				past = true;
-				const last = [data[data.length - 1].Latitud, data[data.length - 1].Longitud];
-				setHistoryItems(data.length-1, last[0], last[1]);	//Habilitar items.
-				//history(data);
+				const first = [data[0].Latitud, data[0].Longitud];
+				createMap(first[0], first[1]);	//Crear mapa.
+
 				//Separar polilineas por auto.
 				var matrix = separatePolylines(data);
-				for(var car of matrix){
-					createPoly(car.vector, randomColor());
+
+				historyObject = [];	//Borrar el objeto de históricos.
+				for(var item of matrix){	//Llenar nuevamente el objeto de históricos.
+					historyObject.push({'placa': item.placa, 'vector': item.vector, 'timeStamps': item.timeStamps});
 				}
+				historyIndex = 0;
+				
+				setHistoryItems(matrix[0].vector.length-1, data[0], data[data.length - 1]);	//Habilitar items.
 
-				var response = limitChars(data[0]);
-				Latitud1.innerHTML = response.Latitud;
-				Longitud1.innerHTML = response.Longitud;
-				TimeStamp1.innerHTML = response.TimeStamp;
-
-				response = limitChars(data[data.length-1]);
-				Latitud2.innerHTML = response.Latitud;
-				Longitud2.innerHTML = response.Longitud;
-				TimeStamp2.innerHTML = response.TimeStamp;
+				createPoly(matrix[0].vector, matrix[0].placa, randomColor(), true);	//Crear polilineas.
+				for(var i=1; i<matrix.length; i++){
+					var car = matrix[i];
+					createPoly(car.vector, car.placa, randomColor(), false);	//Crear polilineas.
+				}
 			}else{
 				alert(response.message);
 			}
@@ -102,9 +106,9 @@ slider.addEventListener('change', function(){
 			mymap.removeLayer(retMarker);
 		}
 		const index = this.value;
-		const lat = historyArray[index].Latitud;
-		const lng = historyArray[index].Longitud;
-		var diahora = historyArray[index].TimeStamp.split('.')[0];
+		const lat = historyObject[historyIndex].vector[index][0];
+		const lng = historyObject[historyIndex].vector[index][1];
+		var diahora = historyObject[historyIndex].timeStamps[index].split('.')[0];
 		diahora = diahora.split('T');
 		const dia = diahora[0];
 		const hora = diahora[1];
@@ -128,7 +132,6 @@ setInterval("peticion()", 3000);
 
 
 //FUNCTIONS.
-
 function peticion(){
 	const url = '/data'
 	const http = new XMLHttpRequest()
@@ -137,23 +140,57 @@ function peticion(){
 	 	if(this.readyState == 4 && this.status == 200){
 			var resultado = JSON.parse(this.responseText);
 			if(past == false){
-				actual = [resultado.Latitud, resultado.Longitud];
+				actual = [resultado[0].Latitud, resultado[0].Longitud];
+
+				//Llenar la matrix de locaciones por placa.
+				for(var car of resultado){
+					var found = false;
+					for(var i=0; i<realtimePlacas.length; i++){
+						var register = realtimePlacas[i];
+						if(register == car.Placa){
+							found = true;
+							realtimeArray[i].push([car.Latitud, car.Longitud]);
+							break;
+						}
+					}
+					if(found == false){
+						realtimeArray.push([[car.Latitud, car.Longitud]]);
+						realtimePlacas.push(car.Placa);
+					}
+				}
+				
+				//Crear el mapa.
+				createMap(resultado[0].Latitud, resultado[0].Longitud);
+
+				//Crear las polilineas.
+				for(var i=0; i<realtimeArray.length; i++){
+					var vector = realtimeArray[i];
+					createPoly(vector, realtimePlacas[i], '#E62727', (i==realtimeIndex)?true:false);
+				}
 
 				//Mostrar los resultados.
-				var response = limitChars(resultado);	//Limitar las cifras significativas.
+				var response = limitChars(resultado[realtimeIndex]);	//Limitar las cifras significativas.
 				Latitud.innerHTML = response.Latitud;
 				Longitud.innerHTML = response.Longitud;
 				TimeStamp.innerHTML = response.TimeStamp;
-
-				//Crear el mapa.
-				createMap(resultado.Latitud, resultado.Longitud);
-
-				//Crear la polilinea.
-				latlng.push([resultado.Latitud, resultado.Longitud]);
-				createPoly(latlng, 'red');
 			}else{
 				//Seguir llenando el vector de polilinea.
-			    latlng.push(resultado.Latitud, resultado.Longitud);
+			    //Llenar la matrix de locaciones por placa.
+				for(var car of resultado){
+					var found = false;
+					for(var i=0; i<realtimePlacas.length; i++){
+						var register = realtimePlacas[i];
+						if(register == car.Placa){
+							found = true;
+							realtimeArray[i].push([car.Latitud, car.Longitud]);
+							break;
+						}
+					}
+					if(found == false){
+						realtimeArray.push([[car.Latitud, car.Longitud]]);
+						realtimePlacas.push(car.Placa);
+					}
+				}
 			}
 		}else{
 			console.log("readyState: ", http.readyState);
@@ -185,34 +222,24 @@ function createMap(lat, lng){
     }
 }
 
-function createPoly(vector, color){
+function createPoly(vector, placa, color, selected){
 	//Polilinea.
-	var polyline = L.polyline(vector, {'color': color}).addTo(mymap);
-	polylines.push(polyline);
+	var polyline = L.polyline(vector, {'color': color, opacity: selected?1.0:0.6}).addTo(mymap);
+	polylines.push({'placa': placa, 'color': color, 'object': polyline});
 
     //Marcador.
 	const lat = vector[vector.length - 1][0];
 	const lng = vector[vector.length - 1][1];
 	const icon = L.divIcon({className: 'my-div-icon',
-	html: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill marker-div-icon" style="color:${color};" viewBox="0 0 16 16">
-	<path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-  </svg>`});
+	html: `	<svg id="${placa}" fill="currentColor" data-color="${color}" class="marker-div-icon ${selected?'selected-marker':'non-selected-marker'}" style="color: ${color}" viewBox="0 0 16 16" onclick="clickMarkerEvent(this);">
+				<path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+  			</svg>`});
     marker = L.marker([lat, lng], {icon: icon});
     marker.addTo(mymap);
+	markers.push(marker);
 }
 
-function history(data){
-	var final = new Array();
-	for(var n=0; n<data.length; n++){
-		final.push([data[n].Latitud, data[n].Longitud]);
-	}
-	createPoly(final, "blue");
-
-	//Marcador y última coordenada.
-    actual = [last[0], last[1]];
-}
-
-function setHistoryItems(tam, lat, lng){
+function setHistoryItems(tam, init, final){
 	slider.style.display = 'block';
 	slider.setAttribute('max', tam);
 	slider.setAttribute('value', tam);
@@ -220,7 +247,13 @@ function setHistoryItems(tam, lat, lng){
 	infoDiv.style.display = 'none';
 	externalDiv.style.display = 'flex';
 
-	createMap(lat, lng);	//Crear mapa.
+	Latitud1.innerHTML = init.Latitud;
+	Longitud1.innerHTML = init.Longitud;
+	TimeStamp1.innerHTML = init.TimeStamp;
+
+	Latitud2.innerHTML = final.Latitud;
+	Longitud2.innerHTML = final.Longitud;
+	TimeStamp2.innerHTML = final.TimeStamp;
 }
 
 function separatePolylines(data){
@@ -238,12 +271,14 @@ function separatePolylines(data){
 	var finalArray = new Array();
 	for(var placa of placas){
 		var temp = new Array();
+		var timeTemp = new Array();
 		for(var car of data){
 			if(car.Placa == placa){
 				temp.push([car.Latitud, car.Longitud]);
+				timeTemp.push(car.TimeStamp);
 			}
 		}
-		finalArray.push({'placa': placa, 'vector': temp});
+		finalArray.push({'placa': placa, 'vector': temp, 'timeStamps': timeTemp});
 	}
 
 	console.log(finalArray);
@@ -252,21 +287,20 @@ function separatePolylines(data){
 
 function removeAll(){
 	if(mymap){
-        if(marker){
-            mymap.removeLayer(marker);
-        }
-
         if(polylines){
         	for(var line of polylines){
         		mymap.removeLayer(line);
         	}
         }
 
-        if(polylines){
-        	for(var line of polylines){
-        		mymap.removeLayer(line);
-        	}
-        }
+        if(markers){
+			for(var line of markers){
+				mymap.removeLayer(line);
+			}
+		}
+
+		polylines = [];
+		markers = [];
     }
 }
 function limitChars(resultado){
@@ -306,4 +340,48 @@ function restrictDate2(dateForm){
 
 function restrictDate1(dateForm){
 	dateForm1.max = dateForm.value;
+}
+
+function clickMarkerEvent(item){
+	var placa = item.getAttribute('id');
+	const divMarkers = document.getElementsByClassName('marker-div-icon');
+	realtimeIndex = realtimePlacas.indexOf(placa);
+
+	for(var poly of polylines){
+		if(poly.placa == placa){
+			const color = poly.color;
+			poly.object.setStyle({color: color, opacity: 1.0});
+			//item.style.color = color;
+		}else{
+			poly.object.setStyle({opacity: 0.6});
+		}
+	}
+
+	for(var divmarker of divMarkers){
+		if(divmarker.getAttribute('id') == placa){
+			const color = divmarker.getAttribute('data-color');
+			if(!divmarker.classList.contains('selected-marker')){
+				divmarker.classList.remove('non-selected-marker');
+				divmarker.classList.add('selected-marker');
+			}
+		}else{
+			if(divmarker.classList.contains('selected-marker')){
+				divmarker.classList.remove('selected-marker');
+				divmarker.classList.add('non-selected-marker');
+			}
+		}
+	}
+
+	if(past){
+		for(var i=0; i<historyObject.length; i++){
+			if(historyObject[i].placa == placa){
+				console.log(historyObject[i]);
+				var length = historyObject[i].vector.length - 1;
+				var initial = {'Latitud': historyObject[i].vector[0][0], 'Longitud': historyObject[i].vector[0][1], 'TimeStamp': historyObject[i].timeStamps[0]};
+				var final = {'Latitud': historyObject[i].vector[length][0], 'Longitud': historyObject[i].vector[length][1], 'TimeStamp': historyObject[i].timeStamps[length]};
+				setHistoryItems(length, initial, final);
+				historyIndex = i;
+			}
+		}
+	}
 }
