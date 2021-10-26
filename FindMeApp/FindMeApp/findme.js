@@ -28,6 +28,7 @@ connection.connect(function(error){
 		console.log("Connection created successfully.");
 	}
 });
+
 //Datagram Socket de recepción.
 socket.on('message', (msg, rinfo) => {
 	console.log(`${msg}`);
@@ -37,7 +38,16 @@ socket.on('message', (msg, rinfo) => {
 	Hora = msg.toString().split(' ')[6];
 	Placa = msg.toString().split(' ')[7];
 	TimeStamp = Fecha.concat(" "+Hora);
-	connection.query(`INSERT INTO ubicacion.registroPlaca (NuevaPlaca, FechaRegistro) VALUE ('${Placa}', '${TimeStamp}')`);
+	connection.query(`SELECT * FROM ubicacion.registroPlaca WHERE NuevaPlaca = '${Placa}'`, function(error, data){
+		if(error){
+			console.log("Error adding in registroPlaca: ", error);
+		}else{
+			if(data.length == 0){
+
+				connection.query(`INSERT INTO ubicacion.registroPlaca (NuevaPlaca, FechaRegistro) VALUE ('${Placa}', '${TimeStamp}')`);
+			}
+		}
+	});
 	connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp, Placa) VALUE ("'+Latitud+'","'+Longitud+'","'+TimeStamp+'","'+Placa+'")');
 });
 socket.bind(50000)
@@ -49,26 +59,21 @@ app.get('/', function(req, res){
 });
 
 app.get('/data', function(req, res){
-	connection.query(`SELECT * FROM ubicacion.registroPlaca`, function(error, data){
-		if(error){
-			console.log("Error geting Placas: ", error);
-		}else{
-			console.log(data);
-			var cont = 0;
-			var finalArray = new Array();
-			for(var i=0; i<data.length; i++){
-				getOneCar(data[i]).then(function(response){
-					finalArray.push(response);
-					if(cont == data.length - 1){
-						console.log(finalArray);
-						res.send(finalArray);
-					}else{
-						cont++;
-					}
-				});
+	var cont = 0;
+	var data = ['HGU123', 'LKI123'];
+	var finalArray = new Array();
+	for(var i=0; i<data.length; i++){
+		getOneCar(data[i]).then(function(response){
+			finalArray.push(response);
+			if(cont == data.length - 1){
+				console.log("GET ONE CAR:");
+				console.log(finalArray);
+				res.send(finalArray);
+			}else{
+				cont++;
 			}
-		}
-	});
+		});
+	}
 });
 
 app.get('/history', function(req, res){
