@@ -1,0 +1,72 @@
+<style type="text/css">
+	.sidenav{
+		width: 300px;
+		height: 100vh;
+		background-color: #0C6080;
+		border: 1px solid black;
+		border-right: 3px solid black;
+		padding: 10px;
+		
+		position: fixed;
+		top: 0px;
+		left: -300px;
+		transition: all 0.5s;
+
+		overflow-y: scroll;
+
+		color: white;
+	}
+
+	#aside-button{
+		background-color: blue;
+		border: 2px solid darkblue;
+		border-left: 0px;
+
+		border-radius: 0px 5px 5px 0px;
+		color: white;
+
+		position: fixed;
+		top: 40vh;
+		left: 0px;
+		transition: all 0.5s;
+	}
+</style>
+
+<div id="sidenav-container">
+	<div id="aside-container">
+		<aside id="sidenav1" class="sidenav">
+			<div class="container-fluid" style="display:flex; justify-content:center;">
+				<h3 style="font-style: italic; font-weight: 700;">
+					Autos registrados
+				</h3>
+			</div>
+			<hr style="margin-top:0px; margin-bottom: 10px;">
+			<div id="aside-content" class="container-fluid"></div>
+		</aside>
+		<button id="aside-button">
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+			  <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+			</svg>
+		</button>
+	</div>
+	
+	<script type="text/javascript">
+		var out = false;
+		const sidenav1 = document.getElementById('sidenav1');
+		const asideButton = document.getElementById('aside-button');
+
+		asideButton.addEventListener('click', function(e){
+			e.preventDefault();
+
+			if(out == false){
+				sidenav1.style.left = '0px';
+				this.style.left = '300px';
+				out = true;
+			}else{
+				sidenav1.style.left = '-300px';
+				this.style.left = '0px';
+				out = false;
+			}
+		});
+	</script>
+</div>

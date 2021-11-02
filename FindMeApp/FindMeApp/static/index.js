@@ -31,9 +31,12 @@ var past = false;
 var polylines = new Array(); //Array de polilineas en general.
 var historyObject = new Array();
 var historyIndex = 0;
-var realtimeIndex = 1;
+var realtimeIndex = 0;
 var realtimeArray = new Array();
 var realtimePlacas = new Array();
+
+const asideContent = document.getElementById('aside-content');
+
 const tiles = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 
 historyBtn.addEventListener('click', function(e){
@@ -127,7 +130,7 @@ function peticion(){
 	 	if(this.readyState == 4 && this.status == 200){
 			var resultado = JSON.parse(this.responseText);
 			if(past == false){
-				actual = [resultado[0].Latitud, resultado[0].Longitud];
+				actual = [resultado[realtimeIndex].Latitud, resultado[realtimeIndex].Longitud];
 
 				//Llenar la matrix de locaciones por placa.
 				for(var car of resultado){
@@ -147,12 +150,17 @@ function peticion(){
 				}
 				
 				//Crear el mapa.
-				createMap(resultado[0].Latitud, resultado[0].Longitud);
-
+				createMap(resultado[realtimeIndex].Latitud, resultado[realtimeIndex].Longitud);
+				console.log("realtimeIndex: ", realtimeIndex);
 				//Crear las polilineas.
 				for(var i=0; i<realtimeArray.length; i++){
 					var vector = realtimeArray[i];
 					createPoly(vector, realtimePlacas[i], '#E62727', (i==realtimeIndex)?true:false);
+				}
+
+				asideContent.innerHTML = "";
+				for(var placa of realtimePlacas){
+					pushCar(placa);
 				}
 
 				//Mostrar los resultados.
@@ -369,6 +377,29 @@ function clickMarkerEvent(item){
 				setHistoryItems(length, initial, final);
 				historyIndex = i;
 			}
+		}
+	}
+}
+
+function pushCar(placa){
+	const external = document.createElement('div');
+	external.setAttribute('id', placa);
+	external.setAttribute('class', 'side-car-container container-fluid');
+	external.setAttribute('onclick', 'selectCar(this)');
+	external.innerHTML = placa;
+
+	asideContent.appendChild(external);
+}
+
+function selectCar(car){
+	const placa = car.getAttribute('id');
+
+	for(var i=0; i<realtimePlacas.length; i++){
+		if(realtimePlacas[i] == placa){
+			var coords = realtimeArray[i][realtimeArray[i].length - 1];
+			seted = false;
+			createMap(coords[0], coords[1]);
+			break;
 		}
 	}
 }

@@ -36,9 +36,9 @@
 		</header>
 
 		<main>
-			<section>
+			<section id="main-section">
 				<div class="container">
-					<div class="container-fluid">
+					<div id="map-container" class="container-fluid">
 						<div id="carHistory-form-Container" style="display:flex; justify-content:center;">
 							<div id="carHistory-form" class="row">
 								<div class="col-12 col-sm-4">
@@ -57,7 +57,7 @@
 							</div>
 						</div>
 
-						<div id="mapa" style="width:100%; height:500px; border: 2px solid black;">
+						<div id="mapa">
 							<div class="leaflet-top leaflet-right">
 								<button id="centerBtn"> Center </button>
 							</div>
@@ -140,6 +140,7 @@
 				</div>
 			</section>
 		</main>
+		<%- include('components/sidenav.html') %>
 		<!--
 		<footer>
 			<div class="contenedor-footer">
