@@ -392,14 +392,16 @@ function pushCar(placa){
 }
 
 function selectCar(car){
-	const placa = car.getAttribute('id');
+	if(past == false){
+		const placa = car.getAttribute('id');
 
-	for(var i=0; i<realtimePlacas.length; i++){
-		if(realtimePlacas[i] == placa){
-			var coords = realtimeArray[i][realtimeArray[i].length - 1];
-			seted = false;
-			createMap(coords[0], coords[1]);
-			break;
+		for(var i=0; i<realtimePlacas.length; i++){
+			if(realtimePlacas[i] == placa){
+				var coords = realtimeArray[i][realtimeArray[i].length - 1];
+				seted = false;
+				createMap(coords[0], coords[1]);
+				break;
+			}
 		}
 	}
 }
