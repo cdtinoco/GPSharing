@@ -66,7 +66,7 @@ historyBtn.addEventListener('click', function(e){
 				}
 				historyIndex = 0;
 				
-				setHistoryItems(matrix[0].vector.length-1, data[0], data[data.length - 1]);	//Habilitar items.
+				setHistoryItems(matrix[0].vector.length-1, data[data.length - 1]);	//Habilitar items.
 
 				createPoly(matrix[0].vector, matrix[0].placa, randomColor(), true);	//Crear polilineas.
 				for(var i=1; i<matrix.length; i++){
@@ -98,23 +98,14 @@ slider.addEventListener('change', function(){
 		const index = this.value;
 		const lat = historyObject[historyIndex].vector[index][0];
 		const lng = historyObject[historyIndex].vector[index][1];
-		var diahora = historyObject[historyIndex].timeStamps[index].split('.')[0];
-		diahora = diahora.split('T');
-		const dia = diahora[0];
-		const hora = diahora[1];
+		var diahora = historyObject[historyIndex].timeStamps[index];
 
-		var texto = `
-		<h5><strong>Latitud: </strong>${lat}</h5>
-		<br>
-		<h5><strong>Longitud: </strong>${lng}</h5>
-		<br>
-		<h5><strong>Día: </strong>${dia}</h5>
-		<br>
-		<h5><strong>Hora: </strong>${hora}</h5>
-		`;
+		Latitud.innerHTML = lat;
+		Longitud.innerHTML = lng;
+		TimeStamp.innerHTML = diahora;
 
-		retMarker = L.marker([lat, lng]);
-		retMarker.addTo(mymap).bindPopup(texto).openPopup();
+		retMarker = L.marker([lat, lng]).addTo(mymap);
+		mymap.panTo(new L.LatLng(lat, lng));
 	}
 });
 
@@ -234,21 +225,14 @@ function createPoly(vector, placa, color, selected){
 	markers.push(marker);
 }
 
-function setHistoryItems(tam, init, final){
+function setHistoryItems(tam, final){
 	slider.style.display = 'block';
 	slider.setAttribute('max', tam);
 	slider.setAttribute('value', tam);
 
-	infoDiv.style.display = 'none';
-	externalDiv.style.display = 'flex';
-
-	Latitud1.innerHTML = init.Latitud;
-	Longitud1.innerHTML = init.Longitud;
-	TimeStamp1.innerHTML = init.TimeStamp;
-
-	Latitud2.innerHTML = final.Latitud;
-	Longitud2.innerHTML = final.Longitud;
-	TimeStamp2.innerHTML = final.TimeStamp;
+	Latitud.innerHTML = final.Latitud;
+	Longitud.innerHTML = final.Longitud;
+	TimeStamp.innerHTML = final.TimeStamp;
 }
 
 function separatePolylines(data){
@@ -372,9 +356,8 @@ function clickMarkerEvent(item){
 			if(historyObject[i].placa == placa){
 				console.log(historyObject[i]);
 				var length = historyObject[i].vector.length - 1;
-				var initial = {'Latitud': historyObject[i].vector[0][0], 'Longitud': historyObject[i].vector[0][1], 'TimeStamp': historyObject[i].timeStamps[0]};
 				var final = {'Latitud': historyObject[i].vector[length][0], 'Longitud': historyObject[i].vector[length][1], 'TimeStamp': historyObject[i].timeStamps[length]};
-				setHistoryItems(length, initial, final);
+				setHistoryItems(length, final);
 				historyIndex = i;
 			}
 		}
@@ -398,8 +381,7 @@ function selectCar(car){
 		for(var i=0; i<realtimePlacas.length; i++){
 			if(realtimePlacas[i] == placa){
 				var coords = realtimeArray[i][realtimeArray[i].length - 1];
-				seted = false;
-				createMap(coords[0], coords[1]);
+				mymap.panTo(new L.LatLng(coords[0], coords[1]));
 				break;
 			}
 		}
