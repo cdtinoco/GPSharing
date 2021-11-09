@@ -1,14 +1,7 @@
 const Latitud = document.getElementById("Latitud"),
 Longitud = document.getElementById("Longitud"),
-TimeStamp = document.getElementById("TimeStamp");
-
-const Latitud1 = document.getElementById("Latitud1"),
-Longitud1 = document.getElementById("Longitud1"),
-TimeStamp1 = document.getElementById("TimeStamp1");
-
-const Latitud2 = document.getElementById("Latitud2"),
-Longitud2 = document.getElementById("Longitud2"),
-TimeStamp2 = document.getElementById("TimeStamp2");
+TimeStamp = document.getElementById("TimeStamp"),
+RPMdiv = document.getElementById('RPMdiv');
 
 const dateForm1 = document.getElementById('date1');
 const dateForm2 = document.getElementById('date2');
@@ -159,6 +152,7 @@ function peticion(){
 				Latitud.innerHTML = response.Latitud;
 				Longitud.innerHTML = response.Longitud;
 				TimeStamp.innerHTML = response.TimeStamp;
+				RPMdiv.innerHTML = response.RPM;
 			}else{
 				//Seguir llenando el vector de polilinea.
 			    //Llenar la matrix de locaciones por placa.
@@ -310,7 +304,8 @@ function limitChars(resultado){
 	TSD = txTimeStamp.split("T")[0];
 	TST = txTimeStamp.split("T")[1];
 	txTS = TSD.concat(" "+TST);
-	return {'Latitud': txLat, 'Longitud': txLng, 'TimeStamp': txTS};
+	var rpm = resultado.RPM;
+	return {'Latitud': txLat, 'Longitud': txLng, 'TimeStamp': txTS, 'RPM': rpm};
 }
 
 function restrictDate2(dateForm){

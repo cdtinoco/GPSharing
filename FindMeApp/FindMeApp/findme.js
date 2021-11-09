@@ -36,7 +36,8 @@ socket.on('message', (msg, rinfo) => {
 	Longitud = msg.toString().split(' ')[3];
 	Fecha = msg.toString().split(' ')[5];
 	Hora = msg.toString().split(' ')[6];
-	Placa = msg.toString().split(' ')[7];
+	rpm = msg.toString().split(' ')[7];
+	Placa = msg.toString().split(' ')[8];
 	TimeStamp = Fecha.concat(" "+Hora);
 	connection.query(`SELECT * FROM ubicacion.registroPlaca WHERE NuevaPlaca = '${Placa}'`, function(error, data){
 		if(error){
@@ -48,7 +49,7 @@ socket.on('message', (msg, rinfo) => {
 			}
 		}
 	});
-	connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp, Placa) VALUE ("'+Latitud+'","'+Longitud+'","'+TimeStamp+'","'+Placa+'")');
+	connection.query('INSERT INTO ubicacion.registroUbi (Latitud, Longitud, TimeStamp, Placa, RPM) VALUE ("'+Latitud+'","'+Longitud+'","'+TimeStamp+'","'+Placa+'","'+rpm+'")');
 });
 socket.bind(50000)
 
