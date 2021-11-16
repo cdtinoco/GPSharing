@@ -36,9 +36,11 @@ socket.on('message', (msg, rinfo) => {
 	Longitud = msg.toString().split(' ')[3];
 	Fecha = msg.toString().split(' ')[5];
 	Hora = msg.toString().split(' ')[6];
-	Placa = msg.toString().split(' ')[7];
 	rpm = msg.toString().split(' ')[8];
+	Placa = msg.toString().split(' ')[9];
 	TimeStamp = Fecha.concat(" "+Hora);
+	console.log(Placa);
+	console.log(rpm);
 	connection.query(`SELECT * FROM ubicacion.registroPlaca WHERE NuevaPlaca = '${Placa}'`, function(error, data){
 		if(error){
 			console.log("Error adding in registroPlaca: ", error);

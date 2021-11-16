@@ -80,6 +80,7 @@ historyBtn.addEventListener('click', function(e){
 returnBtn.addEventListener('click', function(e){
 	e.preventDefault();
 	infoDiv.style.background = 'rgba(58, 58, 204, 0.7)';
+	dataTitle.innerHTML = "Tiempo Real";
 	infoDiv.style.display = 'block';
 	externalDiv.style.display = 'none';
 	slider.style.display = 'none';
@@ -215,7 +216,7 @@ function createPoly(vector, placa, color, selected){
 	const lat = vector[vector.length - 1][0];
 	const lng = vector[vector.length - 1][1];
 	const icon = L.divIcon({className: 'my-div-icon',
-	html: `	<svg id="${placa}" data-checked=${selected?'1':'0'} fill="currentColor" data-color="${color}" class="marker-div-icon" viewBox="0 0 16 16" onclick="clickMarkerEvent(this);">
+	html: `	<svg id="${placa}" data-checked=${selected?'1':'0'} data-color="${color}" class="marker-div-icon" viewBox="0 0 16 16" style="color:${selected?color:'gray'}" onclick="clickMarkerEvent(this);">
 				<path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
   			</svg>`});
     marker = L.marker([lat, lng], {icon: icon});
@@ -351,8 +352,10 @@ function clickMarkerEvent(item){
 	for(var divmarker of divMarkers){
 		if(divmarker.getAttribute('id') == placa){
 			divmarker.setAttribute('data-checked', '1');
+			divmarker.style.color = color;
 		}else{
 			divmarker.setAttribute('data-checked', '0');
+			divmarker.style.color = 'gray';
 		}
 	}
 
@@ -380,9 +383,8 @@ function pushCar(placa){
 }
 
 function selectCar(car){
+	const placa = car.getAttribute('id');
 	if(past == false){
-		const placa = car.getAttribute('id');
-
 		for(var i=0; i<realtimePlacas.length; i++){
 			if(realtimePlacas[i] == placa){
 				var coords = realtimeArray[i][realtimeArray[i].length - 1];
@@ -390,8 +392,16 @@ function selectCar(car){
 				break;
 			}
 		}
-		clickMarkerEvent(car);
+	}else{
+		for(var object of historyObject){
+			if(object.placa == placa){
+				var coords = object.vector[object.vector.length - 1];
+				mymap.panTo(new L.LatLng(coords[0], coords[1]));
+				break;
+			}
+		}
 	}
+	clickMarkerEvent(car);
 }
 
 /*

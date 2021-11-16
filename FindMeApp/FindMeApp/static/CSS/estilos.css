@@ -186,7 +186,7 @@ div#carHistory-form > div > div > button{
 }
 
 svg.marker-div-icon{
-    color: red;
+    fill: currentColor;
 }
 
 svg[data-checked='0']{
