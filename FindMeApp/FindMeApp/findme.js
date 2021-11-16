@@ -36,8 +36,8 @@ socket.on('message', (msg, rinfo) => {
 	Longitud = msg.toString().split(' ')[3];
 	Fecha = msg.toString().split(' ')[5];
 	Hora = msg.toString().split(' ')[6];
-	rpm = msg.toString().split(' ')[7];
-	Placa = msg.toString().split(' ')[8];
+	Placa = msg.toString().split(' ')[7];
+	rpm = msg.toString().split(' ')[8];
 	TimeStamp = Fecha.concat(" "+Hora);
 	connection.query(`SELECT * FROM ubicacion.registroPlaca WHERE NuevaPlaca = '${Placa}'`, function(error, data){
 		if(error){
@@ -60,21 +60,33 @@ app.get('/', function(req, res){
 });
 
 app.get('/data', function(req, res){
-	var cont = 0;
-	var data = ['HGU123', 'LKI123'];
-	var finalArray = new Array();
-	for(var i=0; i<data.length; i++){
-		getOneCar(data[i]).then(function(response){
-			finalArray.push(response);
-			if(cont == data.length - 1){
-				console.log("GET ONE CAR:");
-				console.log(finalArray);
-				res.send(finalArray);
-			}else{
-				cont++;
+	connection.query(`SELECT * FROM ubicacion.registroPlaca`, function(error, placas, fields){
+		if(error){
+			console.log("Error during query to registroPlacas: ", error);
+		}else{
+			console.log("DATA:")
+			console.log(placas)
+			var data = new Array();
+			for(var placa of placas){
+				data.push(placa.NuevaPlaca);
 			}
-		});
-	}
+			var cont = 0;
+			var finalArray = new Array();
+			for(var i=0; i<data.length; i++){
+				getOneCar(data[i]).then(function(response){
+					finalArray.push(response);
+					if(cont == data.length - 1){
+						console.log("GET ONE CAR:");
+						console.log(finalArray);
+						res.send(finalArray);
+					}else{
+						cont++;
+					}
+				});
+			}
+		}
+	});
+	
 });
 
 app.get('/history', function(req, res){

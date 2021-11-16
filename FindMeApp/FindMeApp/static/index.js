@@ -1,7 +1,8 @@
 const Latitud = document.getElementById("Latitud"),
 Longitud = document.getElementById("Longitud"),
 TimeStamp = document.getElementById("TimeStamp"),
-RPMdiv = document.getElementById('RPMdiv');
+RPMdiv = document.getElementById('RPMdiv'),
+dataTitle = document.getElementById('display-data-title');
 
 const dateForm1 = document.getElementById('date1');
 const dateForm2 = document.getElementById('date2');
@@ -27,6 +28,7 @@ var historyIndex = 0;
 var realtimeIndex = 0;
 var realtimeArray = new Array();
 var realtimePlacas = new Array();
+var colors = new Array();
 
 const asideContent = document.getElementById('aside-content');
 
@@ -52,19 +54,20 @@ historyBtn.addEventListener('click', function(e){
 
 				//Separar polilineas por auto.
 				var matrix = separatePolylines(data);
-
+				
 				historyObject = [];	//Borrar el objeto de históricos.
-				for(var item of matrix){	//Llenar nuevamente el objeto de históricos.
-					historyObject.push({'placa': item.placa, 'vector': item.vector, 'timeStamps': item.timeStamps});
-				}
+
 				historyIndex = 0;
 				
 				setHistoryItems(matrix[0].vector.length-1, data[data.length - 1]);	//Habilitar items.
-
-				createPoly(matrix[0].vector, matrix[0].placa, randomColor(), true);	//Crear polilineas.
+				var color = randomColor();
+				historyObject.push({'placa': matrix[0].placa, 'vector': matrix[0].vector, 'timeStamps': matrix[0].timeStamps, 'color': color});
+				createPoly(matrix[0].vector, matrix[0].placa, color, true);	//Crear polilineas.
 				for(var i=1; i<matrix.length; i++){
-					var car = matrix[i];
-					createPoly(car.vector, car.placa, randomColor(), false);	//Crear polilineas.
+					var item = matrix[i];
+					color = randomColor();
+					historyObject.push({'placa': item.placa, 'vector': item.vector, 'timeStamps': item.timeStamps, 'color': color});
+					createPoly(item.vector, item.placa, color, false);	//Crear polilineas.
 				}
 			}else{
 				alert(response.message);
@@ -76,6 +79,7 @@ historyBtn.addEventListener('click', function(e){
 
 returnBtn.addEventListener('click', function(e){
 	e.preventDefault();
+	infoDiv.style.background = 'rgba(58, 58, 204, 0.7)';
 	infoDiv.style.display = 'block';
 	externalDiv.style.display = 'none';
 	slider.style.display = 'none';
@@ -204,14 +208,14 @@ function createMap(lat, lng){
 
 function createPoly(vector, placa, color, selected){
 	//Polilinea.
-	var polyline = L.polyline(vector, {'color': color, opacity: selected?1.0:0.6}).addTo(mymap);
+	var polyline = L.polyline(vector, {'color': selected?color:'gray'}).addTo(mymap);
 	polylines.push({'placa': placa, 'color': color, 'object': polyline});
 
     //Marcador.
 	const lat = vector[vector.length - 1][0];
 	const lng = vector[vector.length - 1][1];
 	const icon = L.divIcon({className: 'my-div-icon',
-	html: `	<svg id="${placa}" fill="currentColor" data-color="${color}" class="marker-div-icon ${selected?'selected-marker':'non-selected-marker'}" style="color: ${color}" viewBox="0 0 16 16" onclick="clickMarkerEvent(this);">
+	html: `	<svg id="${placa}" data-checked=${selected?'1':'0'} fill="currentColor" data-color="${color}" class="marker-div-icon" viewBox="0 0 16 16" onclick="clickMarkerEvent(this);">
 				<path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
   			</svg>`});
     marker = L.marker([lat, lng], {icon: icon});
@@ -224,6 +228,8 @@ function setHistoryItems(tam, final){
 	slider.setAttribute('max', tam);
 	slider.setAttribute('value', tam);
 
+	infoDiv.style.background = 'rgba(16, 243, 64, 0.7)';
+	dataTitle.innerHTML = "Históricos";
 	Latitud.innerHTML = final.Latitud;
 	Longitud.innerHTML = final.Longitud;
 	TimeStamp.innerHTML = final.TimeStamp;
@@ -318,31 +324,35 @@ function restrictDate1(dateForm){
 
 function clickMarkerEvent(item){
 	var placa = item.getAttribute('id');
+	var color;
+	if(past){
+		for(var object of historyObject){
+			if(object.placa == placa){
+				color = object.color;
+				break;
+			}
+		}
+	}else{
+		color = 'red';
+	}
+
 	const divMarkers = document.getElementsByClassName('marker-div-icon');
 	realtimeIndex = realtimePlacas.indexOf(placa);
 
 	for(var poly of polylines){
 		if(poly.placa == placa){
-			const color = poly.color;
-			poly.object.setStyle({color: color, opacity: 1.0});
+			poly.object.setStyle({color: color});
 			//item.style.color = color;
 		}else{
-			poly.object.setStyle({opacity: 0.6});
+			poly.object.setStyle({color: 'gray'});
 		}
 	}
 
 	for(var divmarker of divMarkers){
 		if(divmarker.getAttribute('id') == placa){
-			const color = divmarker.getAttribute('data-color');
-			if(!divmarker.classList.contains('selected-marker')){
-				divmarker.classList.remove('non-selected-marker');
-				divmarker.classList.add('selected-marker');
-			}
+			divmarker.setAttribute('data-checked', '1');
 		}else{
-			if(divmarker.classList.contains('selected-marker')){
-				divmarker.classList.remove('selected-marker');
-				divmarker.classList.add('non-selected-marker');
-			}
+			divmarker.setAttribute('data-checked', '0');
 		}
 	}
 
@@ -380,5 +390,12 @@ function selectCar(car){
 				break;
 			}
 		}
+		clickMarkerEvent(car);
 	}
 }
+
+/*
+	* Reducir el ancho del sidenav.
+	* Terminar de testear la página.
+	* Intentar arreglar lo del color del marker.
+*/
