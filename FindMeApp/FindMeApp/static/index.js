@@ -9,7 +9,6 @@ const dateForm2 = document.getElementById('date2');
 
 const centerBtn = document.getElementById('centerBtn'),
 infoDiv = document.getElementById('infoDiv'),
-externalDiv = document.getElementById('external-div'),
 historyBtn = document.getElementById('historyBtn'),
 returnBtn = document.getElementById('returnBtn'),
 slider = document.getElementById('position-slider');
@@ -28,6 +27,7 @@ var historyIndex = 0;
 var realtimeIndex = 0;
 var realtimeArray = new Array();
 var realtimePlacas = new Array();
+var realtimeRPMs = new Array();
 var colors = new Array();
 
 const asideContent = document.getElementById('aside-content');
@@ -82,7 +82,6 @@ returnBtn.addEventListener('click', function(e){
 	infoDiv.style.background = 'rgba(58, 58, 204, 0.7)';
 	dataTitle.innerHTML = "Tiempo Real";
 	infoDiv.style.display = 'block';
-	externalDiv.style.display = 'none';
 	slider.style.display = 'none';
 	past = false;
 	removeAll();
@@ -129,12 +128,14 @@ function peticion(){
 						if(register == car.Placa){
 							found = true;
 							realtimeArray[i].push([car.Latitud, car.Longitud]);
+							realtimeRPMs[i].push(car.RPM);
 							break;
 						}
 					}
 					if(found == false){
 						realtimeArray.push([[car.Latitud, car.Longitud]]);
 						realtimePlacas.push(car.Placa);
+						realtimeRPMs.push([car.RPM]);
 					}
 				}
 				
@@ -148,8 +149,10 @@ function peticion(){
 				}
 
 				asideContent.innerHTML = "";
-				for(var placa of realtimePlacas){
-					pushCar(placa);
+				for(var i=0; i<realtimePlacas.length; i++){
+					var placa = realtimePlacas[i];
+					var rpm = realtimeRPMs[i][realtimeRPMs[i].length - 1];
+					pushCar(placa, rpm);
 				}
 
 				//Mostrar los resultados.
@@ -323,6 +326,7 @@ function restrictDate1(dateForm){
 	dateForm1.max = dateForm.value;
 }
 
+
 function clickMarkerEvent(item){
 	var placa = item.getAttribute('id');
 	var color;
@@ -336,7 +340,6 @@ function clickMarkerEvent(item){
 	}else{
 		color = 'red';
 	}
-
 	const divMarkers = document.getElementsByClassName('marker-div-icon');
 	realtimeIndex = realtimePlacas.indexOf(placa);
 
@@ -372,12 +375,19 @@ function clickMarkerEvent(item){
 	}
 }
 
-function pushCar(placa){
+function pushCar(placa, rpm){
 	const external = document.createElement('div');
+	external.style.width = '100%';
+	external.style.display = 'flex';
+	external.style.justifyContent = 'space-around';
 	external.setAttribute('id', placa);
 	external.setAttribute('class', 'side-car-container container-fluid');
 	external.setAttribute('onclick', 'selectCar(this)');
-	external.innerHTML = placa;
+	//external.innerHTML = placa;
+	external.innerHTML = `
+	<div>${placa}</div>
+	<div style="color:lightgreen;">${rpm}</div>
+	`
 
 	asideContent.appendChild(external);
 }
