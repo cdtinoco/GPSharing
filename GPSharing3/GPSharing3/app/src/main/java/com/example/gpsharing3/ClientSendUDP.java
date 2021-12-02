@@ -21,7 +21,9 @@ public class ClientSendUDP implements Runnable {
             InetAddress serverAddr3 = InetAddress.getByName("3.139.122.213");
             InetAddress serverAddr4 = InetAddress.getByName("3.136.138.86");
             InetAddress serverAddr5 = InetAddress.getByName("18.190.106.33");
-            String data = MainActivity.miub.getText().toString() + " " + MainActivity.letp.getText().toString().toUpperCase() + MainActivity.nump.getText().toString();
+            String data = MainActivity.miub.getText().toString() + " " +
+                    MainActivity.letp.getText().toString().toUpperCase() +
+                    MainActivity.nump.getText().toString();
             byte[] buf = data.getBytes();
             DatagramPacket packet = new DatagramPacket(buf, buf.length,serverAddr, 50000);
             DatagramPacket packet2 = new DatagramPacket(buf, buf.length,serverAddr2, 50000);
